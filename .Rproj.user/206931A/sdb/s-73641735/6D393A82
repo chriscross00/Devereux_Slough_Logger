@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Time Series\"\noutput: html_notebook\n---\n\n\nThis reads in data from a source, in this case a url, as a list. Our data is converted into a TS. the frequency is the amount of occurances over a set period. In this case because the analysis is done on an annual basis sapply is used to check what datatype our TS is in, i don't think it graphs proper as a non-integer or numeric. \n```{r}\nlibrary(tidyverse)\n\nbirths <- scan(\"http://robjhyndman.com/tsdldata/data/nybirths.dat\")\nbirths_ts <- ts(births, frequency = 12, start = c(1946,1))\nbirths_ts\n\nsapply(briths_ts, class)\n\n\nplot.ts(births_ts)\n```\n\n\n",
+    "created" : 1539563822555.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1879082499",
+    "id" : "6D393A82",
+    "lastKnownWriteTime" : 1539566773,
+    "last_content_update" : 1539566773283,
+    "path" : "~/Learning to Program/R/TS.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "chunk_output_type" : "inline",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
