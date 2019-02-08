@@ -1,0 +1,53 @@
+---
+title: "ts_test"
+author: "Christopher Chan"
+date: "February 7, 2019"
+output:
+    github_document
+---
+
+
+https://rpubs.com/hrbrmstr/time-series-machinations
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(here)
+library(chron)
+library(zoo)
+library(xts)
+```
+
+Reading in a logger dataset that I've been using for testing.
+```{r, results='hide', message=FALSE}
+here()
+
+lv <- read_csv('180301 Level Data.csv')
+head(lv)
+```
+
+converts logger date and time into a readable format for R. Additional reading on this topic can be found here: http://biostat.mc.vanderbilt.edu/wiki/pub/Main/ColeBeck/datestimes.pdf
+```{r}
+lv$date_time <- as.POSIXct(lv$date_time, format = "%m/%d/%y %H:%M")
+
+head(lv)
+```
+
+```{r}
+lv_ts <- ts(lv, start=c(2018, 02, 12, 12, 15), frequency=96)
+
+
+plot(lv_ts)
+```
+
+
+
+
+
+
+
+
+
+

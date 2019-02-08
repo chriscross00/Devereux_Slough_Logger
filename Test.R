@@ -1,7 +1,9 @@
 library(ggplot2)
 library(chron)
-setwd("C:/Users/chris/Downloads/conductivity")
-con = read.csv("180418_Conductivity.csv", header = TRUE, sep=",")
+library(here)
+
+here()
+con = read.csv("180418_Conductivity1.csv", header = TRUE, sep=",")
 head(con)
 
 #converts logger date and time into a readable format for R. Additional reading on this topic can be found here: http://biostat.mc.vanderbilt.edu/wiki/pub/Main/ColeBeck/datestimes.pdf
@@ -21,3 +23,4 @@ plot(x=x$newtime[41:233], y=x$conductivity[41:233], type="l" ,xlab="Date", ylab=
 ###We need to do a couple of things:
 #1 Graph all the CSV onto 1 graphs.
 #2 Graph DO and temperature.
+
