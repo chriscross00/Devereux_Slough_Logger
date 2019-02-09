@@ -7,7 +7,17 @@ output:
 ---
 
 
+To do:
+
+1. Find out how to work with a non-stationary model
+2. Plot acf and pacf
+    * Determine the best model
+
 https://rpubs.com/hrbrmstr/time-series-machinations
+
+
+https://datascienceplus.com/time-series-analysis-using-arima-model-in-r/
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -18,17 +28,17 @@ library(here)
 library(chron)
 library(zoo)
 library(xts)
+library(tseries)
+library(forecast)
 ```
 
 Reading in a logger dataset that I've been using for testing.
 ```{r, results='hide', message=FALSE}
 here()
-
 lv <- read_csv('180301 Level Data.csv')
 
-
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
-# lv$date_time <- format(lv$date_time, format = '%Y-%m-%d %H:%M')
+
 str(lv)
 ```
 
@@ -41,17 +51,10 @@ str(lv_zoo)
 
 Checking to make sure all the data points are in the zoo class. 
 ```{r}
-start(lv_zoo)
-end(lv_zoo)
+cat('Absolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))
 ```
 
-https://datascienceplus.com/time-series-analysis-using-arima-model-in-r/
-
-Fitting an arima model to the data
-```{r}
-
-```
-
+Graphing the water level across time we see that the data is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly [X] months, in Santa Barbara we would expect to see water level decrease in late winter.
 ```{r}
 lv_zoo <- data.frame(lv_zoo)
 
@@ -61,9 +64,34 @@ lv_zoo$ts <- as.POSIXct(rownames(lv_zoo), format = "%Y-%m-%d %H:%M:%S")
 head(lv_zoo)
 
 ggplot(lv_zoo, aes(ts, lv_zoo)) +
-    geom_line()
+    geom_line() 
+```
+
+
+
+```{r}
+series <- rnorm(300)
+ggAcf(series)
+
+ggAcf(lv$level_m)
 
 ```
+
+
+ggAcf(coredata(lv_zoo))
+ggPacf(lv_zoo)
+
+
+
+
+
+
+
+The ACF
+
+acf(coredata(lv_zoo))
+pacf(coredata(lv_zoo))
+
 
 ```{r}
 ggplot(lv, aes(date_time, level_m)) +
@@ -72,6 +100,10 @@ ggplot(lv, aes(date_time, level_m)) +
 
 
 
+Python links:
+
+* https://machinelearningmastery.com/remove-trends-seasonality-difference-transform-python/
+* https://www.analyticsvidhya.com/blog/2018/09/non-stationary-time-series-python/
 
 
 
