@@ -17,6 +17,11 @@ https://rpubs.com/hrbrmstr/time-series-machinations
 
 
 https://datascienceplus.com/time-series-analysis-using-arima-model-in-r/
+https://people.duke.edu/~rnau/411arim2.htm
+
+https://www.r-bloggers.com/time-series-analysis-building-a-model-on-non-stationary-time-series/
+https://otexts.com/fpp2/stationarity.html
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -73,7 +78,7 @@ ggplot(lv_zoo, aes(ts, lv_zoo)) +
 series <- rnorm(300)
 ggAcf(series)
 
-ggAcf(lv$level_m)
+ggAcf(lv$level_m, lag.max=200)
 
 ```
 

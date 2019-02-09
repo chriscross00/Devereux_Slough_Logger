@@ -11,7 +11,9 @@ To do:
 
 <https://rpubs.com/hrbrmstr/time-series-machinations>
 
-<https://datascienceplus.com/time-series-analysis-using-arima-model-in-r/>
+<https://datascienceplus.com/time-series-analysis-using-arima-model-in-r/> <https://people.duke.edu/~rnau/411arim2.htm>
+
+<https://www.r-bloggers.com/time-series-analysis-building-a-model-on-non-stationary-time-series/> <https://otexts.com/fpp2/stationarity.html>
 
 ``` r
 library(tidyverse)
@@ -88,7 +90,7 @@ ggAcf(series)
 ![](ts_test_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 ``` r
-ggAcf(lv$level_m)
+ggAcf(lv$level_m, lag.max=200)
 ```
 
 ![](ts_test_files/figure-markdown_github/unnamed-chunk-6-2.png)
