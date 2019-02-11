@@ -85,10 +85,24 @@ head(lv_zoo)
 
 ``` r
 ggplot(lv_zoo, aes(plot_time, level)) +
-    geom_line()
+    geom_line() +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time')
 ```
 
 ![](ts_test_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+``` r
+ggplot(lv_zoo, aes(plot_time, level)) +
+    geom_line() +
+    geom_smooth(method = 'loess', se = FALSE) +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time')
+```
+
+![](ts_test_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 Plotting the diff(). I'm using the standard R plot because ggplot requires all the x to have a corresponding y. Because diff() preforms the operation *y*<sub>*t*</sub> − *y*<sub>*t* − 1</sub> the first observation will be 'missing', because *y*<sub>0</sub> does not exist.
 
@@ -96,19 +110,19 @@ Plotting the diff(). I'm using the standard R plot because ggplot requires all t
 plot(diff(lv_zoo$level), type='l')
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 ``` r
 ggAcf(diff(lv_zoo$level), lag.max = 200)
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-6-2.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-7-2.png)
 
 ``` r
 ggPacf(diff(lv_zoo$level))
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-6-3.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-7-3.png)
 
 Cycle repeats roughly every 100 observations.
 
@@ -117,13 +131,13 @@ series <- rnorm(300)
 ggAcf(series)
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 ``` r
 ggAcf(lv$level_m, lag.max=200)
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-7-2.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-8-2.png)
 
 ggAcf(coredata(lv\_zoo)) ggPacf(lv\_zoo)
 
@@ -136,7 +150,7 @@ ggplot(lv, aes(date_time, level_m)) +
     geom_line()
 ```
 
-![](ts_test_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](ts_test_files/figure-markdown_github/unnamed-chunk-9-1.png)
 
 Python links:
 

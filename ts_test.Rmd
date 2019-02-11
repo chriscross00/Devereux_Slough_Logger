@@ -71,9 +71,20 @@ lv_zoo <- lv_zoo %>% select(plot_time, level)
 head(lv_zoo)
 
 ggplot(lv_zoo, aes(plot_time, level)) +
-    geom_line()
+    geom_line() +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time')
 ```
 
+```{r}
+ggplot(lv_zoo, aes(plot_time, level)) +
+    geom_line() +
+    geom_smooth(method = 'loess', se = FALSE) +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time')
+```
 
 Plotting the diff(). I'm using the standard R plot because ggplot requires all the x to have a corresponding y. Because diff() preforms the operation $y_{t} - y_{t-1}$ the first observation will be 'missing', because $y_0$ does not exist. 
 ```{r}
