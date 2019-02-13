@@ -59,7 +59,7 @@ cat('Absolute difference in water level over the period of', as.character(start(
 ```
 
 Graphing the water level across time we see that the data is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly [X] months, in Santa Barbara we would expect to see water level decrease in late winter.
-```{r}
+```{r, warning=FALSE}
 lv_zoo <- data.frame(lv_zoo)
 
 lv_zoo <- lv_zoo %>%
@@ -77,6 +77,7 @@ ggplot(lv_zoo, aes(plot_time, level)) +
     ggtitle('Water level (m) over time')
 ```
 
+
 ```{r}
 ggplot(lv_zoo, aes(plot_time, level)) +
     geom_line() +
@@ -86,20 +87,27 @@ ggplot(lv_zoo, aes(plot_time, level)) +
     ggtitle('Water level (m) over time')
 ```
 
-Plotting the diff(). I'm using the standard R plot because ggplot requires all the x to have a corresponding y. Because diff() preforms the operation $y_{t} - y_{t-1}$ the first observation will be 'missing', because $y_0$ does not exist. 
-```{r}
-plot(diff(lv_zoo$level), type='l')
-ggAcf(diff(lv_zoo$level), lag.max = 200)
-ggPacf(diff(lv_zoo$level))
-```
 
-Cycle repeats roughly every 100 observations.
+ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level. Notice that cycles repeat roughly every 100 observations.
 ```{r}
 series <- rnorm(300)
 ggAcf(series)
 
 ggAcf(lv$level_m, lag.max=200)
+```
 
+Plotting the diff(). The ACF, and PACF, look like random noise with some memory of previous events. There also exist some  I'm using the standard R plot because ggplot requires all the x to have a corresponding y. Because diff() preforms the operation $y_{t} - y_{t-1}$ the first observation will be 'missing', because $y_0$ does not exist. 
+```{r}
+lv_diff <- diff(lv_zoo$level) 
+plot(lv_diff, type='l')
+ggAcf(lv_diff, lag.max = 200)
+ggPacf(lv_diff)
+```
+
+
+Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value is less than standrd of 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.
+```{r}
+Box.test(lv_diff, lag=10, type='Ljung-Box')
 ```
 
 
