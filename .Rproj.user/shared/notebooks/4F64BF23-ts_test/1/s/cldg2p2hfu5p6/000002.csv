@@ -1,0 +1,6 @@
+"0","lv_zoo <- data.frame(lv_zoo)"
+"0","lv_zoo <- lv_zoo %>%"
+"0","    rename(level = lv_zoo) %>%"
+"0","    mutate(plot_time = as.POSIXct(rownames(lv_zoo), format = ""%Y-%m-%d %H:%M:%S""))"
+"0","lv_zoo <- lv_zoo %>% select(plot_time, level)"
+"0","head(lv_zoo)"
