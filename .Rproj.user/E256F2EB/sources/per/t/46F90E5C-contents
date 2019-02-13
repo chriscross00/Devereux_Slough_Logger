@@ -94,10 +94,6 @@ ggAcf(lv$level_m, lag.max=200)
 ```
 
 Plotting the diff(). The ACF, and PACF, look like random noise with some memory of previous events. There also exist some  I'm using the standard R plot because ggplot requires all the x to have a corresponding y. Because diff() preforms the operation $y_{t} - y_{t-1}$ the first observation will be 'missing', because $y_0$ does not exist. 
-
- 
-
-Our model is now the residuals(?)
 ```{r}
 lv_diff <- diff(lv_zoo$level) 
 plot(lv_diff, type='l')
@@ -106,19 +102,9 @@ ggPacf(lv_diff)
 ```
 
 
-```{r}
-gghistogram(lv_diff)
-```
-
-
 Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value is less than standrd of 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.
 ```{r}
 Box.test(lv_diff, lag=10, type='Ljung-Box')
-```
-
-This is the same as above. Naive is a ARIMA(0,1,0)
-```{r}
-checkresiduals(naive(lv_zoo$level))
 ```
 
 
@@ -138,10 +124,6 @@ ggplot(lv, aes(date_time, level_m)) +
 ```
 
 
-The classical additive decomposition:
-$$X_{t} = \mu_{t} + s_{t} + Z_{t}$$
-
-Where $\mu_{t}$ is the trend component, $s_{t}$ is the seasonal component, and $Z_{t}$ is the white noise. Goal is to make $Z_{t}$ stationary random so that we can  
 
 Python links:
 
