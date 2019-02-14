@@ -1,2 +1,0 @@
-"0","series <- rnorm(300)"
-"0","ggAcf(series)"

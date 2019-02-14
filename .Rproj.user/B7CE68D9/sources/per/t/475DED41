@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1550100497953.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "97378117",
+    "id" : "475DED41",
+    "lastKnownWriteTime" : 1550103460,
+    "last_content_update" : 1550103460397,
+    "path" : "~/git_projects/Devereux_Slough_Logger/ts_test.Rmd",
+    "project_path" : "ts_test.Rmd",
+    "properties" : {
+        "cursorPosition" : "25,0",
+        "last_setup_crc32" : "78CA9223bb338d19",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
