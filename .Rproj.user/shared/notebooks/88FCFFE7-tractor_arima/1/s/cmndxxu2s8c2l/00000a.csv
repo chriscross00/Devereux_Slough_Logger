@@ -1,0 +1,8 @@
+"0","data <- read_csv('Tractor-Sales.csv')
+"
+"2","Parsed with column specification:
+cols(
+  `Month-Year` = col_character(),
+  `Number of Tractor Sold` = col_integer()
+)
+"

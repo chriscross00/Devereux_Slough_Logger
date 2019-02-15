@@ -15,6 +15,7 @@ http://ucanalytics.com/blogs/step-by-step-graphic-guide-to-forecasting-through-a
 library(here)
 library(tidyverse)
 library(tseries)
+library(forecast)
 ```
 
 Read in data and get it into ts format.
@@ -51,9 +52,26 @@ adf.test(st_data_ts, alternative='stationary')
 Determine degrees of ARIMA from ACF and PACF plots
 ```{r}
 par(mfrow=c(1,2))
-acf(st_data_ts)
-pacf(st_data_ts)
+acf(ts(st_data_ts), main='ACF')
+pacf(ts(st_data_ts), main='PACF')
+```
+Interpretation:
+Because of the significant values in both ACF and PACF plots an ARIMA mode is a good choice. The seasonal component exist because we see spikes at lag 12 on both graphs.
+AR(0), diff(1), MA(1)
+
+```{r}
+arima_fit <- auto.arima(log10(data_ts), approximation=FALSE, trace=FALSE)
+
+summary(arima_fit)
 ```
 
+Predict
+```{r}
+pred <- predict(arima_fit, n.ahead=36)
+# pred
 
-
+plot(data_ts, type='l', xlim=c(2004, 2018), ylim=c(0, 1600))
+lines(10^(pred$pred), col='blue')
+lines(10^(pred$pred + 2*pred$se), col='orange')
+lines(10^(pred$pred - 2*pred$se), col='orange')
+```

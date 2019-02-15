@@ -9,6 +9,7 @@ February 14, 2019
 library(here)
 library(tidyverse)
 library(tseries)
+library(forecast)
 ```
 
 Read in data and get it into ts format.
@@ -77,8 +78,45 @@ Determine degrees of ARIMA from ACF and PACF plots
 
 ``` r
 par(mfrow=c(1,2))
-acf(st_data_ts)
-pacf(st_data_ts)
+acf(ts(st_data_ts), main='ACF')
+pacf(ts(st_data_ts), main='PACF')
 ```
 
-![](tractor_arima_files/figure-markdown_github/unnamed-chunk-7-1.png)
+![](tractor_arima_files/figure-markdown_github/unnamed-chunk-7-1.png) Interpretation: Because of the significant values in both ACF and PACF plots an ARIMA mode is a good choice. The seasonal component exist because we see spikes at lag 12 on both graphs. AR(0), diff(1), MA(1)
+
+``` r
+arima_fit <- auto.arima(log10(data_ts), approximation=FALSE, trace=FALSE)
+
+summary(arima_fit)
+```
+
+    ## Series: log10(data_ts) 
+    ## ARIMA(0,1,1)(0,1,1)[12] 
+    ## 
+    ## Coefficients:
+    ##           ma1     sma1
+    ##       -0.4047  -0.5529
+    ## s.e.   0.0885   0.0734
+    ## 
+    ## sigma^2 estimated as 0.0002571:  log likelihood=354.4
+    ## AIC=-702.79   AICc=-702.6   BIC=-694.17
+    ## 
+    ## Training set error measures:
+    ##                        ME       RMSE        MAE         MPE      MAPE
+    ## Training set 0.0002410698 0.01517695 0.01135312 0.008335713 0.4462212
+    ##                   MASE       ACF1
+    ## Training set 0.2158968 0.01062604
+
+Predict
+
+``` r
+pred <- predict(arima_fit, n.ahead=36)
+# pred
+
+plot(data_ts, type='l', xlim=c(2004, 2018), ylim=c(0, 1600))
+lines(10^(pred$pred), col='blue')
+lines(10^(pred$pred + 2*pred$se), col='orange')
+lines(10^(pred$pred - 2*pred$se), col='orange')
+```
+
+![](tractor_arima_files/figure-markdown_github/unnamed-chunk-9-1.png)
