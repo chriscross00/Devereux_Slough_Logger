@@ -1,0 +1,59 @@
+---
+title: "tractor_arima"
+author: "Christopher Chan"
+date: "February 14, 2019"
+output:
+    github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+http://ucanalytics.com/blogs/step-by-step-graphic-guide-to-forecasting-through-arima-modeling-in-r-manufacturing-case-study-example/
+```{r, message=FALSE, warning=FALSE}
+library(here)
+library(tidyverse)
+library(tseries)
+```
+
+Read in data and get it into ts format.
+```{r, results='hide'}
+here()
+data <- read_csv('Tractor-Sales.csv')
+
+data_ts <- ts(data[,2], start=c(2003, 1), frequency=12)
+plot(data_ts)
+```
+
+dff() data to get a constant mean, eventually make it stationary.
+```{r}
+plot(diff(data_ts))
+```
+
+log transforming to remove the variance.
+```{r}
+plot(log10(data_ts))
+```
+
+log transforming and diff() to make it stationary. The result is much better.
+```{r}
+st_data_ts <- diff(log10(data_ts))
+
+plot(st_data_ts)
+```
+
+Validate stationarity with a ADF test. With a p-value < 0.05 we can reject the null and conclude the results are stationary.
+```{r}
+adf.test(st_data_ts, alternative='stationary')
+```
+
+Determine degrees of ARIMA from ACF and PACF plots
+```{r}
+par(mfrow=c(1,2))
+acf(st_data_ts)
+pacf(st_data_ts)
+```
+
+
+
