@@ -1,2 +1,0 @@
-"0","lv_diff96 <- diff(lv_zoo$level, 96)"
-"0","plot(lv_diff96, type='l')"
