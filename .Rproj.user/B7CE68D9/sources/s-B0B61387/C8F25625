@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1550449612998.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3219821516",
+    "id" : "C8F25625",
+    "lastKnownWriteTime" : 1550449771,
+    "last_content_update" : 1550449771279,
+    "path" : "~/git_projects/Devereux_Slough_Logger/devereux_slough_time_series.Rmd",
+    "project_path" : "devereux_slough_time_series.Rmd",
+    "properties" : {
+        "cursorPosition" : "18,23",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
