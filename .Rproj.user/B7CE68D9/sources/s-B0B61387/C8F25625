@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "3219821516",
+    "hash" : "0",
     "id" : "C8F25625",
-    "lastKnownWriteTime" : 1550449771,
-    "last_content_update" : 1550449771279,
+    "lastKnownWriteTime" : 1550450829,
+    "last_content_update" : 1550450829310,
     "path" : "~/git_projects/Devereux_Slough_Logger/devereux_slough_time_series.Rmd",
     "project_path" : "devereux_slough_time_series.Rmd",
     "properties" : {
-        "cursorPosition" : "18,23",
+        "cursorPosition" : "24,0",
         "scrollLine" : "0",
         "tempName" : "Untitled1"
     },
