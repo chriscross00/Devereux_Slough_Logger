@@ -37,6 +37,8 @@ A untested hypothesis is that Devereux Slough's daily water level changes are ca
 5. Parameters of model
     * Analyze ACF & PACF model
 6. Create model
+    * Why i'm using this model
+        * Pros/Cons
 7. Validate model
 8. Forecast
 9. Conclusion
