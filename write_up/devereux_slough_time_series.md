@@ -28,7 +28,9 @@ This project outlines a small portion of the Water Quality and Invertebrate Moni
 
 Devereux Slough is a temporary closed/open estuary (TOCE) off of the Santa Barbara Channel. It is located within the COPR, a University of California Natural Reserve and managed by the University of California, Santa Barbara (UCSB). Along with the slough, COPR also manages Sands Beach which sits just meters away from Devereux Slough. This is thought to be a major source of water for the estury, though this has changed with the connection of Devereux Slough to North Campus Open Space (NCOS).
 
-![A map of the Devereux Slough and the surrounding area](figures/DevereuxSloughAerialGoogleMaps.jpg)
+![](figures/DevereuxSloughAerialGoogleMaps.jpg)
+
+A map of the Devereux Slough and the surrounding area
 
 In general estuaries are 1 of the most productive aquatic systems in the world. Devereux Slough fits the definition of a temporary closed/open estuary. This means that for part of the year it is open to inputs of water and the rest of the year it is closed to inputs of water. Inputs of water in this context refers to bodies of watr and importantly exclude percipitation. For Devereux Slough it is closed for most of year, only open when it breaches during the winter, for a couple of days. This occurs when Devereux Slough fills up to a critical level from winter percipitation that water will flow over the sand berm and into Sands Beach, ultimately flowing into the Pacific Ocean. [Videos](https://www.youtube.com/watch?v=DVUcGfp0blE) of this event show just how violent flowing water can be.
 
@@ -38,7 +40,7 @@ A PhD thesis by Darcy Goodman examined Devereux Slough in a holistic sense, espe
 
 The Pier is one of three sites that we conducted consistently and is the deepest of all the sites, with consistent depths of over 1.5 meters. Data was collected via data loggers deployed off the Pier. The loggers recorded data every 15 minutes, which amounts to 96 data points per day. We retrieved the data and performed maintaince on the loggers every 2 weeks. This took roughly 2 hours, which explains some of the gaps in the data.
 
-![A gorgeous picture of the Pier. Credits to the Santa Barbara Audubon Society](figures/FT-DevereuxSlough.jpg)
+![](figures/FT-DevereuxSlough.jpg) A gorgeous picture of the Pier. Credits to the Santa Barbara Audubon Society
 
 ### Expected trends
 
