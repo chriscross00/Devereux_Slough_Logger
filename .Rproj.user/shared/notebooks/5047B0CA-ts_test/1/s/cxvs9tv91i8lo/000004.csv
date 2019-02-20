@@ -1,0 +1,3 @@
+"0","ts <- ts(lv_df$level_m, frequency = 96)"
+"0","decomp_ts <- stl(ts, s.window='period')"
+"0","plot(decomp_ts)"

@@ -1,4 +1,4 @@
-"0","ggplot(df_lv, aes(date_time, level_m)) +"
+"0","ggplot(lv_df, aes(date_time, level_m)) +"
 "0","    geom_line() +"
 "0","    xlab('Date') +"
 "0","    ylab('Level (m)') + "

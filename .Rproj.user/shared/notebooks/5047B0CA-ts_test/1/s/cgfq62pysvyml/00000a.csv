@@ -1,0 +1,5 @@
+"0","lv_diff <- lv_zoo %>%"
+"0","    diff(lag=96) %>%"
+"0","    diff()"
+"0","ggtsdisplay(lv_diff, xlab='Sample',"
+"0","                main='Seasonally differenced diff(1) water level')"
