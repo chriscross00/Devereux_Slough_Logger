@@ -1,6 +1,0 @@
-"0","ggplot(df_lv_zoo, aes(plot_time, level)) +"
-"0","    geom_line() +"
-"0","    geom_smooth(method = 'loess', se = FALSE) +"
-"0","    xlab('Date') +"
-"0","    ylab('Level (m)') + "
-"0","    ggtitle('Water level (m) over time')"

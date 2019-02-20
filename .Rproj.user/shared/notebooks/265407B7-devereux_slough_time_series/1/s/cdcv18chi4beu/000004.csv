@@ -1,8 +1,0 @@
-"0","here()"
-"1","[1]"
-"1"," ""C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger"""
-"1","
-"
-"0","lv <- read_csv('180301 Level Data copy.csv')"
-"2","Error: '180301 Level Data copy.csv' does not exist in current working directory ('C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/write_up').
-"

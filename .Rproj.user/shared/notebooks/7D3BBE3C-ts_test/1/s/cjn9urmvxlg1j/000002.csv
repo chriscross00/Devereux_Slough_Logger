@@ -1,4 +1,0 @@
-"0","checkresiduals(naive(lv_zoo$level))
-"
-"2","Error in `$.zoo`(lv_zoo, level) : not possible for univariate zoo series
-"
