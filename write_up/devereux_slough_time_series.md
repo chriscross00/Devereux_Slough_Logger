@@ -62,11 +62,67 @@ Reading in a logger dataset that I've been using for testing.
 ``` r
 here()
 lv <- read_csv('data/180301 Level Data.csv')
+```
 
+Changing the format of the date\_time column into a readible format by time series functions. We are using the zoo() over other time series functions, like the standard ts(), because it works well with irregular intervals.
+
+``` r
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
 
-head(lv)
+lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
+str(lv_zoo)
 ```
+
+    ## 'zoo' series from 2018-02-12 12:00:00 to 2018-03-01 09:15:00
+    ##   Data: num [1:1622] 2.19 2.19 2.19 2.19 2.2 ...
+    ##   Index:  POSIXct[1:1622], format: "2018-02-12 12:00:00" "2018-02-12 12:15:00" ...
+
+``` r
+cat('\nAbsolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))
+```
+
+    ## 
+    ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-03-01 09:15:00 in meters: 0.06599439
+
+Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter.
+
+``` r
+df_lv_zoo <- data.frame(lv_zoo)
+
+df_lv_zoo <- df_lv_zoo %>%
+    rename(level = lv_zoo) %>%
+    mutate(plot_time = as.POSIXct(rownames(df_lv_zoo), format = "%Y-%m-%d %H:%M:%S"))
+df_lv_zoo <- df_lv_zoo %>% select(plot_time, level)
+
+ggplot(df_lv_zoo, aes(plot_time, level)) +
+    geom_line() +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time')
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-4-1.png)
+
+The same time series with a smoothing function to get the general trend.
+
+``` r
+ggplot(df_lv_zoo, aes(plot_time, level)) +
+    geom_line() +
+    geom_smooth(method = 'loess', se = FALSE) +
+    xlab('Date') +
+    ylab('Level (m)') + 
+    ggtitle('Water level (m) over time w/ trend line')
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level.
+
+``` r
+ggAcf(lv$level_m, lag.max=100)
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
 1.  EDA data
     -   Plot of data with loess

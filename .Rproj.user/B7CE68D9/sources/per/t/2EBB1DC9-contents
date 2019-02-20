@@ -10,6 +10,12 @@ https://otexts.com/fpp2/arima-r.html
 https://stats.stackexchange.com/questions/286505/how-do-i-tell-that-my-time-series-is-stationary-or-not
 https://stats.stackexchange.com/questions/137967/is-my-time-series-stationary
 
+
+Seasonality:
+https://stats.stackexchange.com/questions/245729/forecast-time-series-with-two-seasonal-patterns
+https://stats.stackexchange.com/questions/245729/forecast-time-series-with-two-seasonal-patterns
+
+
 To do:
 1. Test seaonality, it has to be daily (https://anomaly.io/detect-seasonality-using-fourier-transform-r/)
 2. remove seasonality from time series
@@ -48,24 +54,9 @@ library(forecast)
 Reading in a logger dataset that I've been using for testing.
 ```{r, results='hide', message=FALSE}
 here()
-lv <- read_csv('180301 Level Data.csv')
+lv <- read_csv('180301 Level Data copy.csv')
 
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
-```
-
-https://robjhyndman.com/hyndsight/seasonal-periods/
-This checks the seasonality and trend of the data. The seasonality seems to be daily and the trend is a gradual downward slope. 
-```{r}
-test1 <- lv[,c(2,5)]
-
-test1 <- ts(test1$level_m, frequency = 96)
-
-test2 <- stl(test1, s.window='period')
-
-```
-
-```{r}
-plot(test2)
 ```
 
 
@@ -115,6 +106,16 @@ ggplot(df_lv_zoo, aes(plot_time, level)) +
     xlab('Date') +
     ylab('Level (m)') + 
     ggtitle('Water level (m) over time w/ trend line')
+```
+
+
+https://robjhyndman.com/hyndsight/seasonal-periods/
+This checks the seasonality and trend of the data. The seasonality seems to be daily and the trend is a gradual downward slope. 
+```{r}
+ts <- ts(df_lv_zoo$level, frequency = 96)
+
+decomp_ts <- stl(ts, s.window='period')
+plot(decomp_ts)
 ```
 
 
@@ -184,7 +185,7 @@ Box.test(lv_diff, lag=10, type='Ljung-Box')
 
 This is the same as above. Naive is a ARIMA(0,1,0)
 ```{r}
-checkresiduals(naive(lv_zoo$level))
+# checkresiduals(naive(lv_zoo$level))
 ```
 
 i'm creating a model
