@@ -1,1 +1,0 @@
-{"frames":[{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"adf.test(lv_diff, alternative = \"stationary\")","line_number":0},{"character_number":0,"end_character_number":0,"end_line_number":0,"file":"","func":"NCOL(x)","line_number":0}],"message":"Error in NCOL(x) : object 'lv_diff' not found\n"}

@@ -1,5 +1,0 @@
-"0","lv_diff <- df_lv_zoo$level %>%"
-"0","    diff(lag=96) %>%"
-"0","    diff() %>%"
-"0","    ggtsdisplay(xlab='Sample',"
-"0","                main='Seasonally differenced level')"
