@@ -11,10 +11,10 @@ https://stats.stackexchange.com/questions/286505/how-do-i-tell-that-my-time-seri
 https://stats.stackexchange.com/questions/137967/is-my-time-series-stationary
 
 To do:
-1. Read Hyndman ARIMA modeling in R
-2. Validate model
-  * Figure out why it predicts a flat line
-3. Write up
+1. Test seaonality, it has to be daily (https://anomaly.io/detect-seasonality-using-fourier-transform-r/)
+2. remove seasonality from time series
+3. validate model
+4. finish write up
 
 
 ### Links:
@@ -53,6 +53,22 @@ lv <- read_csv('180301 Level Data.csv')
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
 ```
 
+https://robjhyndman.com/hyndsight/seasonal-periods/
+This checks the seasonality and trend of the data. The seasonality seems to be daily and the trend is a gradual downward slope. 
+```{r}
+test1 <- lv[,c(2,5)]
+
+test1 <- ts(test1$level_m, frequency = 96)
+
+test2 <- stl(test1, s.window='period')
+
+```
+
+```{r}
+plot(test2)
+```
+
+
 Constructing the zoo class for our data. We are just starting out with water level.
 ```{r}
 lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
@@ -65,7 +81,14 @@ Checking to make sure all the data points are in the zoo class.
 cat('Absolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))
 ```
 
-Graphing the water level across time we see that the data is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly [X] months, in Santa Barbara we would expect to see water level decrease in late winter.
+Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as:
+$Time series = Seasonal + Trend + Random$
+
+Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter.
+
+
+
+
 ```{r, warning=FALSE}
 df_lv_zoo <- data.frame(lv_zoo)
 
@@ -84,20 +107,20 @@ ggplot(df_lv_zoo, aes(plot_time, level)) +
     ggtitle('Water level (m) over time')
 ```
 
-
+The same time series with a smoothing function to get the general trend.
 ```{r}
 ggplot(df_lv_zoo, aes(plot_time, level)) +
     geom_line() +
     geom_smooth(method = 'loess', se = FALSE) +
     xlab('Date') +
     ylab('Level (m)') + 
-    ggtitle('Water level (m) over time')
+    ggtitle('Water level (m) over time w/ trend line')
 ```
 
 
-ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level. Notice that cycles repeat roughly every 100 observations.
+ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level. 
 ```{r}
-ggAcf(lv$level_m, lag.max=100)
+ggAcf(lv$level_m, lag.masx=100)
 ```
 
 

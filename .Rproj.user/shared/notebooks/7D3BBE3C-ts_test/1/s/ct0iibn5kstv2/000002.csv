@@ -1,0 +1,3 @@
+"0","cat('Absolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))"
+"2","Error in start(lv_zoo) : object 'lv_zoo' not found
+"
