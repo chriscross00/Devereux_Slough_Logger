@@ -65,6 +65,18 @@ lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
 str(lv_zoo)
 ```
 
+```{r}
+lv_ts <- ts(lv$level_m, start=c(2018, 02, 12), frequency=96)
+
+
+head(lv_ts)
+
+plot(lv_ts)
+
+```
+
+
+
 Checking to make sure all the data points are in the zoo class. 
 ```{r}
 lv_df <- lv[c(2,5)]
@@ -127,8 +139,7 @@ lv_zoo %>%
 Our decomposed plots indicate that we have seasonality on a daily basis, so we'll take a difference with a lag of 96. This is the water level at the same time the following preceding day. However, simply differencing by season still shows major trends in the ACF function so we'll take the lag-1 difference as well. This will remove the trends from our time series and produces the plots below which show few significant values and residuals with no distinct pattern. With differencing we've been able to remove seasonality and trend from our time series and can procede to make our model.
 ```{r}
 lv_diff <- lv_zoo %>%
-    diff(lag=96) %>%
-    diff()
+    diff(lag=96)
 
 ggtsdisplay(lv_diff, xlab='Sample',
                 main='Seasonally differenced diff(1) water level')
@@ -151,20 +162,40 @@ summary(model_diff)
 ```
 
 
+Read to check the model:
+https://stats.stackexchange.com/questions/286900/arima-forecast-straight-line
+http://online.sfsu.edu/mbar/ECON312_files/Forecasting.html
+
 
 ```{r}
 checkresiduals(model_diff)
 
-autoplot(forecast(model_diff))
+forecast(model_diff, h=50)
 ```
 
 Creation of a model from
 ```{r}
 lv_zoo %>%
-    Arima(order=c(2,1,3), seasonal=c(0,1,0), lambda=0) %>%
-    forecast(h=100) %>%
+    Arima(order=c(2,1,3), seasonal=c(0,1,0)) %>%
+    forecast(h=500) %>%
     autoplot()
 ```
+
+
+
+```{r}
+lv_ts %>%
+    auto.arima() %>%
+    forecast(h=200) %>%
+    autoplot()
+```
+
+
+```{r}
+auto.arima(lv_ts, approximation=FALSE, trace=FALSE)
+    
+```
+
 
 
 Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value is less than standrd of 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.

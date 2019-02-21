@@ -5,7 +5,7 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "450301205",
     "id" : "DB3CDAB6",
     "lastKnownWriteTime" : 1550698427,
     "last_content_update" : 1550698428001,
@@ -13,7 +13,7 @@
     "project_path" : "write_up/devereux_slough_time_series.Rmd",
     "properties" : {
         "cursorPosition" : "85,25",
-        "scrollLine" : "66"
+        "scrollLine" : "0"
     },
     "relative_order" : 2,
     "source_on_save" : false,
