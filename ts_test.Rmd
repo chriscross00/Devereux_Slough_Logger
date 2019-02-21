@@ -181,14 +181,13 @@ lv_zoo %>%
     autoplot()
 ```
 
-
-
 ```{r}
 lv_ts %>%
-    auto.arima() %>%
-    forecast(h=200) %>%
+    Arima(order=c(2,1,3), seasonal=c(0,1,2)) %>%
+    forecast(h=100) %>%
     autoplot()
 ```
+
 
 
 ```{r}

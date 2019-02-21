@@ -1,0 +1,4 @@
+"0","lv_ts %>%"
+"0","    Arima(order=c(2,1,3), seasonal=c(0,1,2)) %>%"
+"0","    forecast(h=100) %>%"
+"0","    autoplot()"
