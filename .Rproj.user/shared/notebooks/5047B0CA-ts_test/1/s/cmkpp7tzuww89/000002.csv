@@ -1,6 +1,0 @@
-"0","lv_ts %>%"
-"0","    auto.arima(D=1) %>%"
-"0","    forecast(h=200) %>%"
-"0","    autoplot()"
-"2","
-"
