@@ -13,10 +13,13 @@ https://stats.stackexchange.com/questions/137967/is-my-time-series-stationary
 
 Seasonality:
 https://stats.stackexchange.com/questions/245729/forecast-time-series-with-two-seasonal-patterns
+https://robjhyndman.com/hyndsight/seasonal-periods/
 
 
 
 To do:
+1. Create model
+    * Read arima documentation
 1. validate model
      * why do the predictions not make sense
 2. finish write up
