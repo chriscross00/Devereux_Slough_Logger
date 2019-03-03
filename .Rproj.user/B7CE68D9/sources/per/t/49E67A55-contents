@@ -109,8 +109,14 @@ ACF before differencing. There is a obvious pattern to our data and most of the 
 ggAcf(lv$level_m, lag.max=100)
 ```
 
-
-
+Our decomposed plots indicate that we have seasonality on a daily basis, so we'll take a difference with a lag of 96. This is the water level at the same time the following preceding day. However, simply differencing by season still shows major trends in the ACF function so we'll take the 1st difference as well. This produces the plots below which show few significant values and residuals with no distinct pattern. With differencing we've been able to remove seasonality from our time series and can procede to make our model.
+```{r}
+lv_diff <- df_lv_zoo$level %>%
+    diff(lag=96) %>%
+    diff() %>%
+    ggtsdisplay(xlab='Sample',
+                main='Seasonally differenced diff(1) water level')
+```
 
 
 3. EDA data

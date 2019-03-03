@@ -1,0 +1,7 @@
+"0","here()"
+"1","[1]"
+"1"," ""C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger"""
+"1","
+"
+"0","lv <- read_csv('180301 Level Data copy.csv')"
+"0","lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')"
