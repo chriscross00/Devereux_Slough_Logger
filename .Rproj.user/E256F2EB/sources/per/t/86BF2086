@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1550732163986.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "46783511",
+    "id" : "86BF2086",
+    "lastKnownWriteTime" : 1550643330,
+    "last_content_update" : 1550732173955,
+    "path" : "~/Documents/git_projects/Devereux_Slough_Logger/tractor/tractor_arima.Rmd",
+    "project_path" : "tractor/tractor_arima.Rmd",
+    "properties" : {
+        "cursorPosition" : "26,13",
+        "last_setup_crc32" : "",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
