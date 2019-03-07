@@ -11,12 +11,6 @@ READ THIS: (Should fix seasonality)
 https://robjhyndman.com/hyndsight/longseasonality/
 
 
-Reasons for using Fourier's Transformation:
-* Seasonal versions of ARIMA are not designed to take in periods as long as daily, 96.
-    * Instead more for monthly, 12, or quarterly, 4.
-    * arima has a seasonal period max of 350, but I saw that I was testing the limits of my 16gb of memory at even 96.
-
-
 https://otexts.com/fpp2/arima-r.html
 https://stats.stackexchange.com/questions/286505/how-do-i-tell-that-my-time-series-is-stationary-or-not
 https://stats.stackexchange.com/questions/137967/is-my-time-series-stationary

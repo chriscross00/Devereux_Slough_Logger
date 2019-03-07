@@ -1,2 +1,0 @@
-"0","what <- lv_ts %>%"
-"0","    arima(order=c(4,1,0), seasonal=list(order=c(0,1,1), period=96))"

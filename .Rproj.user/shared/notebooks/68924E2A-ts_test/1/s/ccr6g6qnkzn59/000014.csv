@@ -1,4 +1,0 @@
-"0","# AR(4)"
-"0","test4 <- arima(lv_ts, order=c(4,1,0))"
-"0","test4_pred <- predict(test4, n.ahead=2000)"
-"0","plot(lv_ts)"

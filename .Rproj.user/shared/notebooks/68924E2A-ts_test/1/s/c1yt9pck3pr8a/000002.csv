@@ -1,4 +1,0 @@
-"0","test2 <- auto.arima(diff(diff(lv_ts, lag=96)), approximation=FALSE, trace=FALSE)
-"
-"2","
-"

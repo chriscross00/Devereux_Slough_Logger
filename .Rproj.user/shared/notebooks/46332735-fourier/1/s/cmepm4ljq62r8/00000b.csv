@@ -1,5 +1,0 @@
-"0","predict(fit, n.ahead=200)
-"
-"2","Error in predict.Arima(fit, n.ahead = 200) : 
-  'xreg' and 'newxreg' have different numbers of columns
-"
