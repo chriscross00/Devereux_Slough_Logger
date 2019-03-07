@@ -1,5 +1,0 @@
-"0","grid(nx=20)
-"
-"2","Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...) : 
-  plot.new has not been called yet
-"

@@ -5,16 +5,16 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1779877206",
+    "hash" : "0",
     "id" : "2EBB1DC9",
-    "lastKnownWriteTime" : 1551921230,
-    "last_content_update" : 1551921230963,
+    "lastKnownWriteTime" : 1551923923,
+    "last_content_update" : 1551923923734,
     "path" : "~/git_projects/Devereux_Slough_Logger/ts_test.Rmd",
     "project_path" : "ts_test.Rmd",
     "properties" : {
-        "cursorPosition" : "212,21",
+        "cursorPosition" : "228,8",
         "last_setup_crc32" : "F4AC5F8bb338d19",
-        "scrollLine" : "212"
+        "scrollLine" : "154"
     },
     "relative_order" : 3,
     "source_on_save" : false,

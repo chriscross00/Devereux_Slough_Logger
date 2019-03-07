@@ -1,0 +1,4 @@
+"0","plot(forecast(auto_fit, h=192, xreg=fourier(auto_fit, K=1, h=192)))"
+"2","Error in ...fourier(x, K, NROW(x) + (1:h)) : 
+  K must be not be greater than period/2
+"

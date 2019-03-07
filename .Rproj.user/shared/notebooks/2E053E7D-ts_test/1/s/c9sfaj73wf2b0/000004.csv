@@ -1,0 +1,2 @@
+"0","auto_fit <- auto.arima(lv_ts_wk, seasonal=FALSE, xreg=fourier(lv_ts_wk, K=c(4,1)))"
+"0","plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts_wk, K=c(4,1), h=192)))"

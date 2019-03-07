@@ -9,6 +9,12 @@ output:
 
 READ THIS: (Should fix seasonality)
 https://robjhyndman.com/hyndsight/longseasonality/
+https://robjhyndman.com/hyndsight/forecasting-weekly-data/
+https://www.kaggle.com/kailex/arima-with-fourier-terms
+https://s3.amazonaws.com/assets.datacamp.com/production/course_3002/slides/ch5.pdf
+
+modeling in ggplot
+https://robjhyndman.com/hyndsight/ftsviz/
 
 
 https://otexts.com/fpp2/arima-r.html
@@ -74,9 +80,20 @@ str(lv_zoo)
 print(ts(lv$level_m, start=c(2018, 02, 12), frequency=365.25), calendar=T)
 ```
 
+msts 
+```{r}
+lv_ts_wk <- msts(lv$level_m, seasonal.periods=c(96,35064))
+head(lv_ts_wk)
+plot(lv_ts_wk)
+```
+arima with daily and annual seasonality
+```{r}
+auto_fit <- auto.arima(lv_ts_wk, seasonal=FALSE, xreg=fourier(lv_ts_wk, K=c(4,1)))
+plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts_wk, K=c(4,1), h=192)))
+```
 
 ```{r}
-lv_ts <- ts(lv$level_m, frequency=96)
+lv_ts <- ts(lv$level_m, f=96)
 
 
 head(lv_ts)
@@ -208,11 +225,12 @@ what <- lv_ts %>%
 
 just testing a FT
 ```{r}
-auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=4))
+auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=1))
+auto_fit
 ```
 plot of auto_arima FT
 ```{r}
-plot(forecast(auto_fit, h=2*m, xreg=fourier(y, K=4, h=2*m)))
+plot(forecast(auto_fit, h=192, xreg=fourier(auto_fit, K=1, h=192)))
 grid(nx=20)
 ```
 
