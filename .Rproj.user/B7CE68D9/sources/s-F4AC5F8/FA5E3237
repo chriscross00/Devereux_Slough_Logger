@@ -7,14 +7,14 @@
     "folds" : "",
     "hash" : "0",
     "id" : "FA5E3237",
-    "lastKnownWriteTime" : 1551919184,
-    "last_content_update" : 1551919184947,
+    "lastKnownWriteTime" : 1551920890,
+    "last_content_update" : 1551920890919,
     "path" : "~/git_projects/Devereux_Slough_Logger/fourier.Rmd",
     "project_path" : "fourier.Rmd",
     "properties" : {
-        "cursorPosition" : "17,32",
+        "cursorPosition" : "56,37",
         "last_setup_crc32" : "F4AC5F8bb338d19",
-        "scrollLine" : "0"
+        "scrollLine" : "53"
     },
     "relative_order" : 6,
     "source_on_save" : false,

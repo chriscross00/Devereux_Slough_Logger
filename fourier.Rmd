@@ -19,6 +19,12 @@ Fourier Transformation (FT):
     * And the more general form that is used in calculations: $$e^{ix} = cos(x) + isin(x)$$
 
 
+N = number of time samples we have
+n = current sample we're considering (0 .. N-1)
+xn = value of the signal at time n
+k = current frequency we're considering (0 Hertz up to N-1 Hertz)
+Xk = amount of frequency k in the signal (amplitude and phase, a complex number)
+
 Reasons for using Fourier Transformation:
 
 * Seasonal versions of ARIMA are not designed to take in periods as long as daily, 96.

@@ -11,12 +11,6 @@ READ THIS: (Should fix seasonality)
 https://robjhyndman.com/hyndsight/longseasonality/
 
 
-Reasons for using Fourier's Transformation:
-* Seasonal versions of ARIMA are not designed to take in periods as long as daily, 96.
-    * Instead more for monthly, 12, or quarterly, 4.
-    * arima has a seasonal period max of 350, but I saw that I was testing the limits of my 16gb of memory at even 96.
-
-
 https://otexts.com/fpp2/arima-r.html
 https://stats.stackexchange.com/questions/286505/how-do-i-tell-that-my-time-series-is-stationary-or-not
 https://stats.stackexchange.com/questions/137967/is-my-time-series-stationary
@@ -82,7 +76,7 @@ print(ts(lv$level_m, start=c(2018, 02, 12), frequency=365.25), calendar=T)
 
 
 ```{r}
-lv_ts <- ts(lv$level_m, frequency=12)
+lv_ts <- ts(lv$level_m, frequency=96)
 
 
 head(lv_ts)
@@ -212,12 +206,15 @@ what <- lv_ts %>%
     arima(order=c(4,1,0), seasonal=list(order=c(0,1,1), period=96))
 ```
 
-
+just testing a FT
 ```{r}
-test2 <- auto.arima(diff(diff(lv_ts, lag=96)), approximation=FALSE, trace=FALSE)
-    
+auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=4))
 ```
-
+plot of auto_arima FT
+```{r}
+plot(forecast(auto_fit, h=2*m, xreg=fourier(y, K=4, h=2*m)))
+grid(nx=20)
+```
 
 
 Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value is less than standrd of 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.

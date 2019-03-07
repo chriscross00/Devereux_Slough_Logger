@@ -1,0 +1,4 @@
+"0","lv_df <- lv[c(2,5)]"
+"0","cat('Absolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))"
+"2","Error in start(lv_zoo) : object 'lv_zoo' not found
+"
