@@ -1,5 +1,0 @@
-"0","n <- 2000"
-"0","m <- 200"
-"0","y <- ts(rnorm(n) + (1:n)%%100/30, f=m)"
-"0","fit <- Arima(y, order=c(2,0,1), xreg=fourier(y, K=4))"
-"0","plot(forecast(fit, h=2*m, xreg=fourier(y, K=4, h=2*m)))"

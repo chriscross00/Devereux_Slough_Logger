@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551597227960.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "477419756",
+    "id" : "893C850",
+    "lastKnownWriteTime" : 1552006741,
+    "last_content_update" : 1552006741584,
+    "path" : "~/Documents/git_projects/Devereux_Slough_Logger/fourier.Rmd",
+    "project_path" : "fourier.Rmd",
+    "properties" : {
+        "cursorPosition" : "22,75",
+        "last_setup_crc32" : "",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,2 @@
+"0","test1_diff <- diff(lv_ts_wk, lag=96)"
+"0","ggAcf(test1_diff, lag.max=100)"
