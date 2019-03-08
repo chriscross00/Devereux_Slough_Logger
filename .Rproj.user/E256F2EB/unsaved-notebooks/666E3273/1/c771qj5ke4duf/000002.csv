@@ -1,4 +1,0 @@
-"0","lh02 <- log(h02)"
-"0","cbind(""H02 sales (million scripts)"" = h02,"
-"0","      ""Log H02 sales""=lh02) %>%"
-"0","  autoplot(facets=TRUE) + xlab(""Year"") + ylab("""")"

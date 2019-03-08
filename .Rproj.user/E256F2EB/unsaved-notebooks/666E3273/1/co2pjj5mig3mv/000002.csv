@@ -1,3 +1,0 @@
-"0","lh02 %>% diff(lag=12) %>%"
-"0","  ggtsdisplay(xlab=""Year"","
-"0","    main=""Seasonally differenced H02 scripts"")"

@@ -1,0 +1,52 @@
+---
+title: "model_playground"
+author: "Christoper Chan"
+date: "March 7, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(gridExtra)
+library(here)
+library(zoo)
+library(tseries)
+library(forecast)
+```
+
+Reading in a logger dataset that I've been using for testing.
+```{r, results='hide', message=FALSE}
+here()
+lv <- read_csv('180301 Level Data copy.csv')
+
+lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
+```
+
+The adf test shows that the raw ts is non-stationary. The differed(96) shows that there it is staiontary.
+```{r}
+lv_ts_wk <- msts(lv$level_m, seasonal.periods=c(96,35064))
+test1_diff <- diff(lv_ts_wk, lag=96)
+
+lv_ts_wk %>% adf.test(k=96)
+test1_diff %>% adf.test(k=96)
+```
+
+```{r}
+ggAcf(test1_diff, lag.max=100)
+ggPacf(test1_diff, lag.max=100)
+```
+
+arima with daily and annual seasonality
+```{r}
+auto_fit <- auto.arima(lv_ts_wk, seasonal=FALSE, xreg=fourier(lv_ts_wk, K=c(4,1)))
+plot(forecast(auto_fit, h=400, xreg=fourier(lv_ts_wk, K=c(4,1), h=400)))
+```
+
+```{r}
+auto_fit
+```
+
