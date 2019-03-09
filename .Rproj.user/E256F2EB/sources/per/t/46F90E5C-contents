@@ -6,9 +6,8 @@ output:
     github_document
 ---
 
-Layout:
-
-
+Benchmark:
+https://afit-r.github.io/ts_benchmarking
 
 READ THIS: (Should fix seasonality)
 https://robjhyndman.com/hyndsight/longseasonality/
