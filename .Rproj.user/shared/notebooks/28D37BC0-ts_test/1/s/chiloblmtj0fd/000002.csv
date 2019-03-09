@@ -1,0 +1,2 @@
+"0","lv_ts_wk <- msts(lv$level_m, seasonal.periods=c(96,35064))"
+"0","plot(lv_ts_wk)"

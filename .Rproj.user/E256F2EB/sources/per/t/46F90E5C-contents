@@ -8,8 +8,7 @@ output:
 
 Layout:
 
-* Because I am using auto.arima() i don't need to diff
-* However, i'll still diff and show the acf and pacf
+
 
 READ THIS: (Should fix seasonality)
 https://robjhyndman.com/hyndsight/longseasonality/
@@ -30,10 +29,6 @@ Seasonality:
 https://stats.stackexchange.com/questions/245729/forecast-time-series-with-two-seasonal-patterns
 https://stackoverflow.com/questions/23604432/daily-time-series-with-ts-how-to-specify-start-and-end
 
-To do:
-1. Check residuals
-2. Organize
-3. Write-up
 
 
 ### Links:
@@ -71,14 +66,6 @@ msts
 lv_ts_wk <- msts(lv$level_m, seasonal.periods=c(96,35064))
 
 plot(lv_ts_wk)
-```
-
-
-Constructing the zoo class for our data. We are just starting out with water level.
-```{r}
-lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
-
-str(lv_zoo)
 ```
 
 The adf test shows that the raw ts is non-stationary. The differed(96) shows that there it is staiontary.
@@ -259,8 +246,21 @@ Python links:
 * https://www.analyticsvidhya.com/blog/2018/09/non-stationary-time-series-python/
 
 
+date-time split test
+```{r}
+lv$date <- as.Date(lv$date_time)
+lv$time <- format(as.POSIXct(lv$date_time), format="%H:%M")
 
+head(lv)
+lv_df <- lv[,5:7]
+```
 
+```{r}
+test_ts <- ts(lv_df['level_m'], start=c(2, 12), frequency=96)
+
+head(test_ts)
+plot(test_ts)
+```
 
 
 

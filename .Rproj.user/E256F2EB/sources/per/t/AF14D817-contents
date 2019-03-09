@@ -9,6 +9,12 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+To do:
+1. Check residuals
+2. Organize
+3. Write-up
+
+
 # Introduction
 
 Devereux Slough is a estuary in the Santa Barbara County. We developed Water Quality and Invertebrate Monitoring Program which collected samples from Devereux Slough. Water quality data was captured at regular intervals allowing us to build a time series model. This time series model can provide insights on how the estuary varies over time, while also predicting how the estuary might look in the future.
@@ -59,6 +65,10 @@ library(forecast)
 ```
 
 # 2 Normalizing the data
+Things to add:
+
+* Create the msts
+
 Reading in a logger dataset that I've been using for testing.
 ```{r, results='hide', message=FALSE}
 here()
@@ -71,10 +81,22 @@ Changing the format of the date_time column into a readible format by time serie
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
 lv_df <- lv[c(2,5)]
 
-cat('\nAbsolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
+cat('\nAbsolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
 ```
 
 # 3. EDA
+Things to add:
+
+* More background
+* What the graph shows
+* Analysis
+* ACF and PACF
+    * non-diff and diff
+* ADF
+    * non-diff and diff
+
+
+
 Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as:
 $Time series = Seasonal + Trend + Random$
 
@@ -99,10 +121,6 @@ ggplot(df_lv_zoo, aes(plot_time, level)) +
     ggtitle('Water level (m) over time w/ trend line')
 ```
 
-TO DO: Write more
-* What the graph shows
-* Analysis
-
 
 ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level. 
 ```{r}
@@ -111,6 +129,7 @@ ggAcf(lv$level_m, lag.max=100)
 
 Our decomposed plots indicate that we have seasonality on a daily basis, so we'll take a difference with a lag of 96. This is the water level at the same time the following preceding day. However, simply differencing by season still shows major trends in the ACF function so we'll take the 1st difference as well. This produces the plots below which show few significant values and residuals with no distinct pattern. With differencing we've been able to remove seasonality from our time series and can procede to make our model.
 ```{r}
+# Redo plot
 lv_diff <- df_lv_zoo$level %>%
     diff(lag=96) %>%
     diff() %>%
@@ -119,9 +138,7 @@ lv_diff <- df_lv_zoo$level %>%
 ```
 
 
-4. Stationarity
-    * ACF & PACF
-    * ADF and KPSS test
+
 5. Parameters of model
     * Analyze ACF & PACF model
 6. Create model
