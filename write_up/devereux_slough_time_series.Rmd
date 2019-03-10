@@ -72,6 +72,7 @@ Things to add:
 Reading in a logger dataset that I've been using for testing.
 ```{r, results='hide', message=FALSE}
 here()
+
 lv <- read_csv('data/180301 Level Data.csv')
 head(lv, n=5)
 ```
@@ -100,7 +101,7 @@ Things to add:
 Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as:
 $Time series = Seasonal + Trend + Random$
 
-Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter.
+Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter. Additionally, we should expect a annual seasonality, meaning that the water level will have a predictable cycle over the course of a year. We'll have to factor both the daily and annual seasonality into our time series model.
 
 ```{r, warning=FALSE}
 ggplot(lv_df, aes(date_time, level_m)) +
@@ -111,20 +112,21 @@ ggplot(lv_df, aes(date_time, level_m)) +
     ggtitle('Water level (m) over time')
 ```
 
-The same time series with a smoothing function to get the general trend.
-```{r}
-ggplot(df_lv_zoo, aes(plot_time, level)) +
-    geom_line() +
-    geom_smooth(method = 'loess', se = FALSE) +
-    xlab('Date') +
-    ylab('Level (m)') + 
-    ggtitle('Water level (m) over time w/ trend line')
+This breaks down the data into it's individual components: seasonality, trend and the residuals. The seasonality seems to be daily and the trend is a gradual downward slope.
+
+While our time series has both daily and annual seasonality, we only run it with the daily seasonality because we don't have a entire annual seasonal cycle. stl() requires a entire cycle.
+```{r, fig.width=9, fig.height=5}
+decomp_ts <- ts(lv_df$level_m, frequency = 96) %>%
+    stl(s.window='period') %>%
+    plot(main='Decomposition of level_m')
 ```
 
 
-ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level. 
+ACF and PACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level.
 ```{r}
-ggAcf(lv$level_m, lag.max=100)
+ggtsdisplay(lv_df$level_m, main='ACF and PACF of level_m')
+
+ggtsdisplay(diff(lv_df$level_m, lag=96), main='ACF and PACF of diff(level_m)')
 ```
 
 Our decomposed plots indicate that we have seasonality on a daily basis, so we'll take a difference with a lag of 96. This is the water level at the same time the following preceding day. However, simply differencing by season still shows major trends in the ACF function so we'll take the 1st difference as well. This produces the plots below which show few significant values and residuals with no distinct pattern. With differencing we've been able to remove seasonality from our time series and can procede to make our model.
