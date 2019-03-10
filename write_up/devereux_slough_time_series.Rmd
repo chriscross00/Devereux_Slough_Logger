@@ -23,10 +23,11 @@ This project is broken down into the following steps:
 
 1. Background of Devereux Slough and data
 2. Normalizing the data
-3. Creating the model
-4. Validating the model
-5. Forecasting
-6. Conclusion
+3. EDA
+4. Creating the model
+5. Validating the model
+6. Forecasting
+7. Conclusion
 
 This model serves several purposes. First, allows the COPR staff to more informed management descisions about the reserve and Devereux Slough. Collecting data and building models should result in better management of the reserve. Second, it extends the power of the COPR staff, allowing volunteers to contribute in meaningful ways with minimal effort from the COPR staff. Third, it can contribute to the larger scientific understanding of ecology. There is little scientific literature on TOCE in North America, most of the literature reflects TOCE in South Africa.
 
@@ -87,8 +88,6 @@ cat('\nAbsolute difference in water level over the period of', as.character(min(
 ```
 
 # 3. EDA
-* ADF
-    * non-diff and diff
 
 Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as:
 $Time series = Seasonal + Trend + Random$
@@ -125,13 +124,32 @@ A more mathematically rigorous analysis of stationarity is the Augmented Dickey 
 adf.test(lv_df$level_m, k=96)
 ```
 
+# 4.Create the model
 
+Things to add:
 
-5. Parameters of model
-    * Analyze ACF & PACF model
-6. Create model
+* ARIMA model
+    * Background
+    * equation
     * Why i'm using this model
         * Pros/Cons
+* Fourier transform
+    * Background
+    * Equation
+    * Why I need to use
+* ts object
+* arima
+```{r}
+lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
+```
+
+```{r}
+auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(4,1)))
+plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts, K=c(4,1), h=192)))
+```
+
+6. Create model
+
 7. Validate model
 8. Forecast
 9. Conclusion
