@@ -7,15 +7,15 @@
     "folds" : "",
     "hash" : "0",
     "id" : "46F90E5C",
-    "lastKnownWriteTime" : 1552125475,
-    "last_content_update" : 1552125475075,
+    "lastKnownWriteTime" : 1552206381,
+    "last_content_update" : 1552206381058,
     "path" : "~/Documents/git_projects/Devereux_Slough_Logger/ts_test.Rmd",
     "project_path" : "ts_test.Rmd",
     "properties" : {
-        "cursorPosition" : "143,0",
+        "cursorPosition" : "69,107",
         "docOutlineVisible" : "0",
         "last_setup_crc32" : "",
-        "scrollLine" : "137"
+        "scrollLine" : "68"
     },
     "relative_order" : 1,
     "source_on_save" : false,

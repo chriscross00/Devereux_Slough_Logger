@@ -3,6 +3,8 @@ Devereux Slough Time Series
 Christopher Chan
 February 17, 2019
 
+To do: 1. Check residuals 2. Organize 3. Write-up
+
 Introduction
 ============
 
@@ -49,53 +51,52 @@ Santa Barbara's climate is classified as a Mediterranean climate, characterized 
 ``` r
 library(tidyverse)
 library(here)
-library(zoo)
-library(tseries)
 library(forecast)
+library(tseries)
 ```
 
 2 Normalizing the data
 ======================
 
+Things to add:
+
+-   Create the msts
+
 Reading in a logger dataset that I've been using for testing.
 
 ``` r
 here()
+
 lv <- read_csv('data/180301 Level Data.csv')
+head(lv, n=5)
 ```
 
 Changing the format of the date\_time column into a readible format by time series functions. We are using the zoo() over other time series functions, like the standard ts(), because it works well with irregular intervals.
 
 ``` r
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
+lv_df <- lv[c(2,5)]
 
-lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
-str(lv_zoo)
-```
-
-    ## 'zoo' series from 2018-02-12 12:00:00 to 2018-03-01 09:15:00
-    ##   Data: num [1:1622] 2.19 2.19 2.19 2.19 2.2 ...
-    ##   Index:  POSIXct[1:1622], format: "2018-02-12 12:00:00" "2018-02-12 12:15:00" ...
-
-``` r
-cat('\nAbsolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))
+cat('\nAbsolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
 ```
 
     ## 
-    ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-03-01 09:15:00 in meters: 0.06599439
+    ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-02-12 12:00:00 in meters: 0.06599439
 
-Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter.
+3. EDA
+======
+
+-   ADF
+    -   non-diff and diff
+
+Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as: *T**i**m**e**s**e**r**i**e**s* = *S**e**a**s**o**n**a**l* + *T**r**e**n**d* + *R**a**n**d**o**m*
+
+Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter. Additionally, we should expect a annual seasonality, meaning that the water level will have a predictable cycle over the course of a year. We'll have to factor both the daily and annual seasonality into our time series model.
 
 ``` r
-df_lv_zoo <- data.frame(lv_zoo)
-
-df_lv_zoo <- df_lv_zoo %>%
-    rename(level = lv_zoo) %>%
-    mutate(plot_time = as.POSIXct(rownames(df_lv_zoo), format = "%Y-%m-%d %H:%M:%S"))
-df_lv_zoo <- df_lv_zoo %>% select(plot_time, level)
-
-ggplot(df_lv_zoo, aes(plot_time, level)) +
+ggplot(lv_df, aes(date_time, level_m)) +
     geom_line() +
+    geom_smooth(method = 'loess', se = FALSE) +
     xlab('Date') +
     ylab('Level (m)') + 
     ggtitle('Water level (m) over time')
@@ -103,37 +104,50 @@ ggplot(df_lv_zoo, aes(plot_time, level)) +
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
-The same time series with a smoothing function to get the general trend.
+This breaks down the data into it's individual components: seasonality, trend and the residuals, well irregular components using loess which gives the acronym STL. The seasonality seems to be daily and the amplitude does not seem to change, confirming a constant variance. This means we don't need to transform the amplitude, ie take the log. The trend is a relatively constant negative slope that occurs over the course of the dataset. The remainder, which are residuals from the seasonal plus trend fit, show no distinct pattern and are white noise. This means that all the data has been extracted from it and we have captured the entire picture.
+
+While our time series has both daily and annual seasonality, we only run it with the daily seasonality because we don't have a entire annual seasonal cycle. stl() requires a entire cycle.
 
 ``` r
-ggplot(df_lv_zoo, aes(plot_time, level)) +
-    geom_line() +
-    geom_smooth(method = 'loess', se = FALSE) +
-    xlab('Date') +
-    ylab('Level (m)') + 
-    ggtitle('Water level (m) over time w/ trend line')
+decomp_ts <- ts(lv_df$level_m, frequency = 96) %>%
+    stl(s.window='periodic') %>%
+    plot(main='Decomposition of level_m')
 ```
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
-ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level.
+Because our decomposition plots show a negative trend we must make the time series stationary. This is done by taking the seasonal difference. The ACF and PACF before and after differencing are shown below. Because each day has 96 observations, our daily seasonal difference component is lag=96.A plot of the data after taking the seasonal difference shows that the trend is removed. Even after taking the seasonal difference there is significant autocorrelation with previous points. Now that the trend is removed from the dataset we can move on with our model.
 
 ``` r
-ggAcf(lv$level_m, lag.max=100)
+ggtsdisplay(lv_df$level_m, main='ACF and PACF of level_m')
 ```
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-1.  EDA data
-    -   Plot of data with loess
-2.  Stationarity
-    -   ACF & PACF
-    -   ADF and KPSS test
-3.  Parameters of model
+``` r
+ggtsdisplay(diff(lv_df$level_m, lag=96), main='ACF and PACF of diff(level_m)')
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-2.png)
+
+A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of 0.3656. Because our p-value &gt; 0.05 we can reject our *H*<sub>0</sub> that there is a unit root in our time series, and accept the *H*<sub>1</sub> that the time series is stationary.
+
+``` r
+adf.test(lv_df$level_m, k=96)
+```
+
+    ## 
+    ##  Augmented Dickey-Fuller Test
+    ## 
+    ## data:  lv_df$level_m
+    ## Dickey-Fuller = -2.5025, Lag order = 96, p-value = 0.3656
+    ## alternative hypothesis: stationary
+
+1.  Parameters of model
     -   Analyze ACF & PACF model
-4.  Create model
+2.  Create model
     -   Why i'm using this model
         -   Pros/Cons
-5.  Validate model
-6.  Forecast
-7.  Conclusion
+3.  Validate model
+4.  Forecast
+5.  Conclusion
