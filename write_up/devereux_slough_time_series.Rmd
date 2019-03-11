@@ -157,6 +157,13 @@ Things to add:
 * auto.arima
     * analysis
     * Ecological significance
+* Validate model
+    * looks
+    * residuals
+        * plot ACF, should not be correlated
+        * Ljung-box
+        * calculate mean and plot residuals 
+
 ```{r}
 lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
 ```

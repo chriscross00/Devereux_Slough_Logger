@@ -137,3 +137,50 @@ no changes added to commit (use "git add" and/or "git commit -a")
 [K]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger[00m$ git add .
 ]0;/home/ckc/Documents/git_projects/Devereux_Slough_Logger]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger[00m$ git commit -m 's[K[K]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger [00m$ git commit -m '[K[A]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger[00m$ git ccommit -m '[K[K[K[K[K[K[K[K[K[K[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
 [K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[Kgit  add .
+]0;/home/ckc/Documents/git_projects/Devereux_Slough_Logger]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger[00m$ git  commit -m 'work for tomorrow'
+[master dc61db4] work for tomorrow
+ 42 files changed, 152 insertions(+), 135 deletions(-)
+ rewrite .Rproj.user/E256F2EB/console06/INDEX001 (87%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/46F90E5C (73%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/46F90E5C-contents (94%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/AF14D817 (69%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/AF14D817-contents (90%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/F1ED951C (95%)
+ rename .Rproj.user/E256F2EB/sources/{per/t => s-A55B0050}/F1ED951C-contents (100%)
+ create mode 100644 .Rproj.user/E256F2EB/sources/s-A55B0050/lock_file
+ create mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/E256F2EBA55B0050/chunks.json
+ delete mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/s/c54w82yz71ige/000013.metadata
+ delete mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/s/c54w82yz71ige/000013.png
+ delete mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/s/c54w82yz71ige/000013.snapshot
+ delete mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/s/c5zs0wyvwy9ac/000011.metadata
+ delete mode 100644 .Rproj.user/shared/notebooks/28D37BC0-ts_test/1/s/c5zs0wyvwy9ac/000011.rdf
+ create mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/E256F2EBA55B0050/chunks.json
+ create mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/c0uu5bzlx8zw2/000004.csv
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/c18ir5geptrne/{000025.csv => 000002.csv} (100%)
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/c18ir5geptrne/{000026.metadata => 000003.metadata} (100%)
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/c18ir5geptrne/{000026.png => 000003.png} (100%)
+ rewrite .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/chunks.json (85%)
+ rewrite .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cl8u42gap49jv/000003.png (98%)
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/clzv14kpyp2y6/{000004.csv => 000006.csv} (100%)
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/clzv14kpyp2y6/{000005.metadata => 000007.metadata} (100%)
+ rename .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/clzv14kpyp2y6/{000005.rdf => 000007.rdf} (100%)
+ delete mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cq6kc2avrvu2s/000004.csv
+ delete mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cqa76aj3egzvz/000002.csv
+ delete mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cqa76aj3egzvz/000003.metadata
+ delete mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cqa76aj3egzvz/000003.png
+ delete mode 100644 .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/cqa76aj3egzvz/000003.snapshot
+ rewrite .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/ctgftujf8fqmn/000011.png (99%)
+ rewrite .Rproj.user/shared/notebooks/3BFA21EE-devereux_slough_time_series/1/s/ctgftujf8fqmn/000013.png (99%)
+ create mode 100644 write_up/devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-9-1.png
+]0;/home/ckc/Documents/git_projects/Devereux_Slough_Logger]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger[00m$ git  push origin master
+Username for 'https://github.com': chriscross00
+Password for 'https://chriscross00@github.com': 
+Counting objects: 49, done.
+Delta compression using up to 6 threads.
+Compressing objects:   2% (1/40)   Compressing objects:   5% (2/40)   Compressing objects:   7% (3/40)   Compressing objects:  10% (4/40)   Compressing objects:  12% (5/40)   Compressing objects:  15% (6/40)   Compressing objects:  17% (7/40)   Compressing objects:  20% (8/40)   Compressing objects:  22% (9/40)   Compressing objects:  25% (10/40)   Compressing objects:  27% (11/40)   Compressing objects:  30% (12/40)   Compressing objects:  32% (13/40)   Compressing objects:  35% (14/40)   Compressing objects:  37% (15/40)   Compressing objects:  40% (16/40)   Compressing objects:  42% (17/40)   Compressing objects:  45% (18/40)   Compressing objects:  47% (19/40)   Compressing objects:  50% (20/40)   Compressing objects:  52% (21/40)   Compressing objects:  55% (22/40)   Compressing objects:  57% (23/40)   Compressing objects:  60% (24/40)   Compressing objects:  62% (25/40)   Compressing objects:  65% (26/40)   Compressing objects:  67% (27/40)   Compressing objects:  70% (28/40)   Compressing objects:  72% (29/40)   Compressing objects:  75% (30/40)   Compressing objects:  77% (31/40)   Compressing objects:  80% (32/40)   Compressing objects:  82% (33/40)   Compressing objects:  85% (34/40)   Compressing objects:  87% (35/40)   Compressing objects:  90% (36/40)   Compressing objects:  92% (37/40)   Compressing objects:  95% (38/40)   Compressing objects:  97% (39/40)   Compressing objects: 100% (40/40)   Compressing objects: 100% (40/40), done.
+Writing objects:   2% (1/49)   Writing objects:   4% (2/49)   Writing objects:   6% (3/49)   Writing objects:   8% (4/49)   Writing objects:  10% (5/49)   Writing objects:  12% (6/49)   Writing objects:  14% (7/49)   Writing objects:  16% (8/49)   Writing objects:  18% (9/49)   Writing objects:  20% (10/49)   Writing objects:  22% (11/49)   Writing objects:  24% (12/49)   Writing objects:  26% (13/49)   Writing objects:  28% (14/49)   Writing objects:  30% (15/49)   Writing objects:  32% (16/49)   Writing objects:  34% (17/49)   Writing objects:  36% (18/49)   Writing objects:  38% (19/49)   Writing objects:  40% (20/49)   Writing objects:  42% (21/49)   Writing objects:  44% (22/49)   Writing objects:  48% (24/49)   Writing objects:  51% (25/49)   Writing objects:  53% (26/49)   Writing objects:  55% (27/49)   Writing objects:  57% (28/49)   Writing objects:  59% (29/49)   Writing objects:  61% (30/49)   Writing objects:  63% (31/49)   Writing objects:  65% (32/49)   Writing objects:  67% (33/49)   Writing objects:  69% (34/49)   Writing objects:  71% (35/49)   Writing objects:  73% (36/49)   Writing objects:  75% (37/49)   Writing objects:  77% (38/49)   Writing objects:  79% (39/49)   Writing objects:  81% (40/49)   Writing objects:  83% (41/49)   Writing objects:  85% (42/49)   Writing objects:  87% (43/49)   Writing objects:  89% (44/49)   Writing objects:  91% (45/49)   Writing objects:  93% (46/49)   Writing objects:  95% (47/49)   Writing objects:  97% (48/49)   Writing objects: 100% (49/49)   Writing objects: 100% (49/49), 154.81 KiB | 12.90 MiB/s, done.
+Total 49 (delta 21), reused 0 (delta 0)
+remote: Resolving deltas:   0% (0/21)   [Kremote: Resolving deltas:   9% (2/21)   [Kremote: Resolving deltas:  14% (3/21)   [Kremote: Resolving deltas:  19% (4/21)   [Kremote: Resolving deltas:  23% (5/21)   [Kremote: Resolving deltas:  28% (6/21)   [Kremote: Resolving deltas:  33% (7/21)   [Kremote: Resolving deltas:  38% (8/21)   [Kremote: Resolving deltas:  42% (9/21)   [Kremote: Resolving deltas:  47% (10/21)   [Kremote: Resolving deltas:  61% (13/21)   [Kremote: Resolving deltas:  66% (14/21)   [Kremote: Resolving deltas:  71% (15/21)   [Kremote: Resolving deltas:  76% (16/21)   [Kremote: Resolving deltas:  80% (17/21)   [Kremote: Resolving deltas:  85% (18/21)   [Kremote: Resolving deltas:  90% (19/21)   [Kremote: Resolving deltas:  95% (20/21)   [Kremote: Resolving deltas: 100% (21/21)   [Kremote: Resolving deltas: 100% (21/21), completed with 17 local objects.[K
+To https://github.com/chriscross00/Devereux_Slough_Logger.git
+   645f548..dc61db4  master -> master
+[K]0;ckc@ckc-desktop: ~/Documents/git_projects/Devereux_Slough_Logger[01;32mckc@ckc-desktop[00m:[01;34m~/Documents/git_projects/Devereux_Slough_Logger [00m$ git add .
