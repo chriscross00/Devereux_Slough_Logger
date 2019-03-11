@@ -14,7 +14,17 @@ To do:
 2. Organize
 3. Write-up
 
+### Technologies used
 
+* RMarkdown
+* Libraries
+    * tidyverse
+    * forecast
+* Time series
+    * ACF and PACF
+    * Fourier transform    
+    * ARIMA models
+    
 # Introduction
 
 Devereux Slough is a estuary in the Santa Barbara County. We developed Water Quality and Invertebrate Monitoring Program which collected samples from Devereux Slough. Water quality data was captured at regular intervals allowing us to build a time series model. This time series model can provide insights on how the estuary varies over time, while also predicting how the estuary might look in the future.
@@ -84,7 +94,7 @@ Changing the format of the date_time column into a readible format by time serie
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
 lv_df <- lv[c(2,5)]
 
-cat('\nAbsolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
+cat('Absolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
 ```
 
 # 3. EDA
@@ -119,9 +129,13 @@ ggtsdisplay(lv_df$level_m, main='ACF and PACF of level_m')
 ggtsdisplay(diff(lv_df$level_m, lag=96), main='ACF and PACF of diff(level_m)')
 ```
 
-A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of 0.3656. Because our p-value > 0.05 we can reject our $H_0$ that there is a unit root in our time series, and accept the $H_1$ that the time series is stationary.
-```{r}
-adf.test(lv_df$level_m, k=96)
+A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of less than 0.01. Because our p-value > 0.05 we can reject our $H_0$ that there is a unit root in our time series, and accept the $H_1$ that the time series is stationary.
+```{r, warning=FALSE}
+lv_adf <- adf.test(lv_df$level_m, k=96)
+lv_diff_adf <- adf.test(diff(lv_df$level_m, lag=96), k=96)
+
+cat('p-value from adf.test() of lv_df:', lv_adf$p.value)
+cat('\np-value from adf.test() of seasonally differenced lv_df:', lv_diff_adf$p.value)
 ```
 
 # 4.Create the model
@@ -131,14 +145,18 @@ Things to add:
 * ARIMA model
     * Background
     * equation
+    $$Y_{t} = c + \phi_{1}y_{dt-1} + \phi_{p}y_{dt-p} + ... + \theta_{1}\epsilon_{t-1} + \theta_{q}\epsilon_{t-q} + \epsilon_{t}$$
     * Why i'm using this model
         * Pros/Cons
 * Fourier transform
     * Background
     * Equation
     * Why I need to use
-* ts object
-* arima
+* msts object
+    * Explain why I need multiple seasonals
+* auto.arima
+    * analysis
+    * Ecological significance
 ```{r}
 lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
 ```

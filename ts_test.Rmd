@@ -236,28 +236,4 @@ Python links:
 * https://www.analyticsvidhya.com/blog/2018/09/non-stationary-time-series-python/
 
 
-date-time split test
-```{r}
-lv$date <- as.Date(lv$date_time)
-lv$time <- format(as.POSIXct(lv$date_time), format="%H:%M")
-
-head(lv)
-lv_df <- lv[,5:7]
-```
-
-```{r}
-test_ts <- ts(lv_df['level_m'], start=c(2, 12), frequency=96)
-
-head(test_ts)
-plot(test_ts)
-```
-
-
-
-lv_df <- lv_df %>%
-    mutate(plot_time = as.POSIXct(rownames(lv_df), format = "%Y-%m-%d %H:%M:%S"))
-lv_df <- lv_df %>% select(plot_time, level)
-
-
-head(lv_df)
 

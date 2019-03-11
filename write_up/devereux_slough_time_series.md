@@ -5,6 +5,17 @@ February 17, 2019
 
 To do: 1. Check residuals 2. Organize 3. Write-up
 
+### Technologies used
+
+-   RMarkdown
+-   Libraries
+    -   tidyverse
+    -   forecast
+-   Time series
+    -   ACF and PACF
+    -   Fourier transform
+    -   ARIMA models
+
 Introduction
 ============
 
@@ -14,10 +25,11 @@ This project is broken down into the following steps:
 
 1.  Background of Devereux Slough and data
 2.  Normalizing the data
-3.  Creating the model
-4.  Validating the model
-5.  Forecasting
-6.  Conclusion
+3.  EDA
+4.  Creating the model
+5.  Validating the model
+6.  Forecasting
+7.  Conclusion
 
 This model serves several purposes. First, allows the COPR staff to more informed management descisions about the reserve and Devereux Slough. Collecting data and building models should result in better management of the reserve. Second, it extends the power of the COPR staff, allowing volunteers to contribute in meaningful ways with minimal effort from the COPR staff. Third, it can contribute to the larger scientific understanding of ecology. There is little scientific literature on TOCE in North America, most of the literature reflects TOCE in South Africa.
 
@@ -77,17 +89,13 @@ Changing the format of the date\_time column into a readible format by time seri
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
 lv_df <- lv[c(2,5)]
 
-cat('\nAbsolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
+cat('Absolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
 ```
 
-    ## 
     ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-02-12 12:00:00 in meters: 0.06599439
 
 3. EDA
 ======
-
--   ADF
-    -   non-diff and diff
 
 Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as: *T**i**m**e**s**e**r**i**e**s* = *S**e**a**s**o**n**a**l* + *T**r**e**n**d* + *R**a**n**d**o**m*
 
@@ -130,24 +138,57 @@ ggtsdisplay(diff(lv_df$level_m, lag=96), main='ACF and PACF of diff(level_m)')
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-2.png)
 
-A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of 0.3656. Because our p-value &gt; 0.05 we can reject our *H*<sub>0</sub> that there is a unit root in our time series, and accept the *H*<sub>1</sub> that the time series is stationary.
+A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of less than 0.01. Because our p-value &gt; 0.05 we can reject our *H*<sub>0</sub> that there is a unit root in our time series, and accept the *H*<sub>1</sub> that the time series is stationary.
 
 ``` r
-adf.test(lv_df$level_m, k=96)
+lv_adf <- adf.test(lv_df$level_m, k=96)
+lv_diff_adf <- adf.test(diff(lv_df$level_m, lag=96), k=96)
+
+cat('p-value from adf.test() of lv_df:', lv_adf$p.value)
+```
+
+    ## p-value from adf.test() of lv_df: 0.36561
+
+``` r
+cat('\np-value from adf.test() of seasonally differenced lv_df:', lv_diff_adf$p.value)
 ```
 
     ## 
-    ##  Augmented Dickey-Fuller Test
-    ## 
-    ## data:  lv_df$level_m
-    ## Dickey-Fuller = -2.5025, Lag order = 96, p-value = 0.3656
-    ## alternative hypothesis: stationary
+    ## p-value from adf.test() of seasonally differenced lv_df: 0.01
 
-1.  Parameters of model
-    -   Analyze ACF & PACF model
-2.  Create model
+4.Create the model
+==================
+
+Things to add:
+
+-   ARIMA model
+    -   Background
+    -   equation
+        *Y*<sub>*t*</sub> = *c* + *ϕ*<sub>1</sub>*y*<sub>*d**t* − 1</sub> + *ϕ*<sub>*p*</sub>*y*<sub>*d**t* − *p*</sub> + ... + *θ*<sub>1</sub>*ϵ*<sub>*t* − 1</sub> + *θ*<sub>*q*</sub>*ϵ*<sub>*t* − *q*</sub> + *ϵ*<sub>*t*</sub>
     -   Why i'm using this model
         -   Pros/Cons
-3.  Validate model
-4.  Forecast
-5.  Conclusion
+-   Fourier transform
+    -   Background
+    -   Equation
+    -   Why I need to use
+-   msts object
+-   auto.arima
+    -   analysis
+    -   Ecological significance
+
+``` r
+lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
+```
+
+``` r
+auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(4,1)))
+plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts, K=c(4,1), h=192)))
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+1.  Create model
+
+2.  Validate model
+3.  Forecast
+4.  Conclusion

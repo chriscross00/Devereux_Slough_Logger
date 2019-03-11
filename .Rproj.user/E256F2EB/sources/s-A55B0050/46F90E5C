@@ -5,17 +5,17 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "954186767",
+    "hash" : "0",
     "id" : "46F90E5C",
-    "lastKnownWriteTime" : 1552206381,
-    "last_content_update" : 1552206381058,
+    "lastKnownWriteTime" : 1552273211,
+    "last_content_update" : 1552273211614,
     "path" : "~/Documents/git_projects/Devereux_Slough_Logger/ts_test.Rmd",
     "project_path" : "ts_test.Rmd",
     "properties" : {
-        "cursorPosition" : "85,0",
+        "cursorPosition" : "42,0",
         "docOutlineVisible" : "0",
         "last_setup_crc32" : "",
-        "scrollLine" : "68"
+        "scrollLine" : "12"
     },
     "relative_order" : 1,
     "source_on_save" : false,
