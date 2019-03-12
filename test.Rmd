@@ -1,0 +1,21 @@
+---
+title: "test"
+author: "Christoper Chan"
+date: "March 12, 2019"
+output:
+    rmarkdown::github_document:
+        pandoc_args: --webtex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as:
+$Time series = Seasonal + Trend + Random$
+
+
+$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)}\\
+\text{96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
+
+
+$$Y_{t} = c + \phi_{1}y_{dt-1} + \phi_{p}y_{dt-p} + ... + \theta_{1}\epsilon_{t-1} + \theta_{q}\epsilon_{t-q} + \epsilon_{t}$$

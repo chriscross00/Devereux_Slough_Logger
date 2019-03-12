@@ -4,7 +4,7 @@ author: "Christopher Chan"
 date: "February 17, 2019"
 output:
     rmarkdown::github_document:
-        pandoc_arg: --webtex
+        pandoc_args: --webtex
 ---
 
 ```{r setup, include=FALSE}
