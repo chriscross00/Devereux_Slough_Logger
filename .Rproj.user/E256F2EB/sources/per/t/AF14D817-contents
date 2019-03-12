@@ -2,29 +2,15 @@
 title: "Devereux Slough Time Series"
 author: "Christopher Chan"
 date: "February 17, 2019"
-output: github_document
+output:
+    rmarkdown::github_document:
+        pandoc_arg: --webtex
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-To do:
-1. Check residuals
-2. Organize
-3. Write-up
-
-### Technologies used
-
-* RMarkdown
-* Libraries
-    * tidyverse
-    * forecast
-* Time series
-    * ACF and PACF
-    * Fourier transform    
-    * ARIMA models
-    
 # Introduction
 
 Devereux Slough is a estuary in the Santa Barbara County. We developed Water Quality and Invertebrate Monitoring Program which collected samples from Devereux Slough. Water quality data was captured at regular intervals allowing us to build a time series model. This time series model can provide insights on how the estuary varies over time, while also predicting how the estuary might look in the future.
@@ -43,6 +29,16 @@ This model serves several purposes. First, allows the COPR staff to more informe
 
 This project outlines a small portion of the Water Quality and Invertebrate Monitoring Program carried out by the Santa Barbarba Audubon Society, Coal Oil Point Reserve (COPR) and the Cheadle Center for Biodiversity and Ecological Restoration. More information about the Santa Barbara Audubon Society can be found [here](https://santabarbaraaudubon.org/), as well as COPR which can be found [here](https://copr.nrs.ucsb.edu/).
 
+### Technologies used
+
+* RMarkdown
+* Libraries
+    * tidyverse
+    * forecast
+* Time series
+    * ACF and PACF
+    * Fourier transform    
+    * ARIMA models
 
 # 1 Background
 
