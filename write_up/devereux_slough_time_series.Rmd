@@ -134,8 +134,8 @@ A more mathematically rigorous analysis of stationarity is the Augmented Dickey 
 lv_adf <- adf.test(lv_df$level_m, k=96)
 lv_diff_adf <- adf.test(diff(lv_df$level_m, lag=96), k=96)
 
-cat('p-value from adf.test() of lv_df:', lv_adf$p.value)
-cat('\np-value from adf.test() of seasonally differenced lv_df:', lv_diff_adf$p.value)
+cat('p-value from adf.test() of lv_df:', lv_adf$p.value,
+    '\np-value from adf.test() of seasonally differenced lv_df:', lv_diff_adf$p.value)
 ```
 
 # 4.Create the model
@@ -156,8 +156,8 @@ Things to add:
     * Explain why I need multiple seasonals
 
 For this project we'll use a multi-seasonal time series (msts) function as our time series. This allows us to take into account the daily seasonality we've seen from the plots and the annual seasonality we'd expect to see based on meteorological reasoning. Since the loggers take measurements every 15 minutes we get our seasonal.period from the following equations:
-$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)
-96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
+$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)}\\
+\text{96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
 
 Now that we have normalized our data and have time series object made we create a model.
 ```{r}
@@ -184,7 +184,6 @@ arima_param <- function(ts){
     return(best_fit)
 }
 ```
-
 
 ```{r}
 arima_model <- arima_param(lv_ts)

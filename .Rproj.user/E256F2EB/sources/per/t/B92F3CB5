@@ -8,13 +8,13 @@
     "hash" : "93466381",
     "id" : "B92F3CB5",
     "lastKnownWriteTime" : 1552380623,
-    "last_content_update" : 1552380845225,
+    "last_content_update" : 1552381688865,
     "path" : "~/Documents/git_projects/Devereux_Slough_Logger/model_playground.Rmd",
     "project_path" : "model_playground.Rmd",
     "properties" : {
         "cursorPosition" : "87,29",
-        "last_setup_crc32" : "F28A972bb338d19",
-        "scrollLine" : "73",
+        "last_setup_crc32" : "",
+        "scrollLine" : "0",
         "tempName" : "Untitled2"
     },
     "relative_order" : 4,

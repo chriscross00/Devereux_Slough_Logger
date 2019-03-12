@@ -9,8 +9,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-r
-r$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)
-96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
+```{r}
+cat('p-value from adf.test() of lv_df:djks')
+```
 
-r
