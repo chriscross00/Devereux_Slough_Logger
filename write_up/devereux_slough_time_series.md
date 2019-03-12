@@ -22,7 +22,9 @@ This model serves several purposes. First, allows the COPR staff to more informe
 
 This project outlines a small portion of the Water Quality and Invertebrate Monitoring Program carried out by the Santa Barbarba Audubon Society, Coal Oil Point Reserve (COPR) and the Cheadle Center for Biodiversity and Ecological Restoration. More information about the Santa Barbara Audubon Society can be found [here](https://santabarbaraaudubon.org/), as well as COPR which can be found [here](https://copr.nrs.ucsb.edu/).
 
-### Technologies used
+### Technologies and techniques used
+
+Throughout the course of this analysis I've used a number of tools to accomplish our goals.
 
 -   RMarkdown
 -   Libraries
@@ -162,12 +164,19 @@ Things to add:
 
     -   Why i'm using this model
         -   Pros/Cons
--   Fourier transform
-    -   Background
-    -   Equation
-    -   Why I need to use
--   msts object
-    -   Explain why I need multiple seasonals
+
+The Fourier Transform (FT) decomposes a function based on time into the frequencies that make it up, using the understanding that all waveforms can be drescibed by a sum of sinusoids of different frequencies
+
+The inverse fourier transform that converts a function of frequency into a function of time, as follows:
+
+![f(x) = \\int^{\\infty}\_{-\\infty}F(K)e^{2{\\pi}ikx}dk](https://latex.codecogs.com/png.latex?f%28x%29%20%3D%20%5Cint%5E%7B%5Cinfty%7D_%7B-%5Cinfty%7DF%28K%29e%5E%7B2%7B%5Cpi%7Dikx%7Ddk "f(x) = \int^{\infty}_{-\infty}F(K)e^{2{\pi}ikx}dk")
+
+We need to use a FT because seasonal versions of ARIMA are not designed to take in periods as long as daily, 96, instead seasonal ARIMA periods are typically much shorter like monthly, 12, or quarterly, 4. ARIMA implemented in R has a seasonal period max of 350, but I saw that I was testing the limits of my 16gb of memory at even 96. Instead we'll use the fourier transformation, this has a number of advantages:
+
+    * Can use seasonality of any length
+    * Can include multiple seasonalities. In this case we can do daily and annual
+
+The main disadvantage is that seasonality is assumed to be fixed. In this case it is fine, because the variance among days is stable and seasonality is very stable, we won't take more than 96 measurements per day and we've accounted for leap years.
 
 For this project we'll use a multi-seasonal time series (msts) function as our time series. This allows us to take into account the daily seasonality we've seen from the plots and the annual seasonality we'd expect to see based on meteorological reasoning. Since the loggers take measurements every 15 minutes we get our seasonal.period from the following equations:
 
@@ -185,15 +194,20 @@ lv_ts <- msts(lv$level_m, seasonal.periods=c(96,35064))
     -   analysis
     -   Ecological significance
 
+We'll create a function for reproducibility. It performs a grid search of ARIMA parameters by adjusting the orders of the Fourier term. By comparing the AIC of different models we can select the model with the largest AIC.
+
 ``` r
 arima_param <- function(ts){
-    best_fit <- list(model=Inf, aicc=Inf, i=Inf, j=Inf)
+    # Performs a grid search for optimal ARIMA parameters by comparing aicc of each model
+    # 
+    # Return: The model and fourier transform with the lowest aicc
+    best_fit <- list(model=Inf, aic=Inf, i=Inf, j=Inf)
     
     for (i in 1:10){
         for (j in 1:5){
             fit <- auto.arima(ts, seasonal=FALSE, xreg=fourier(ts, K=c(i,j)))
-            if (fit$aicc < best_fit$aicc)
-                best_fit <- list(model=fit, aicc=fit$aicc, i=i, j=j)
+            if (fit$aic < best_fit$aic)
+                best_fit <- list(model=fit, aicc=fit$aic, i=i, j=j)
             else break;
         }
     
@@ -201,6 +215,8 @@ arima_param <- function(ts){
     return(best_fit)
 }
 ```
+
+Running the ARIMA parameter chooser function on our msts dataset. Plotting a forecast for two days gives us reasonable results. However, we have to validate our model in order to trust our forecast.
 
 ``` r
 arima_model <- arima_param(lv_ts)
@@ -214,14 +230,13 @@ autoplot(plotter)
 5. Validate model
 =================
 
--   Validate model
-    -   looks
-    -   residuals
-        -   plot ACF, should not be correlated
-        -   Ljung-box
-        -   calculate mean and plot residuals
+checkresiduals() is a nice wrapper function that calls a number of test typically used in validating time series models. We'll look at each test individually to make sure we can trust our forecasts.
 
-Running a Lijung-Box test to quantifiable determine if the ACF of lv\_diff is non-zero. Because the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") of the Box-Ljung test is that the data is independently distributed, rejecting the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") means that serial correlation exist in the data. Since the p-value &lt; 0.05, in this case it is less than 2.2e-16, we reject the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") and conclude the data has some serial correlation.
+Running a Lijung-Box test helps give us a quantifiable determination if the our model is valide. The Ljung-Box test examines if there is autocorrelation in the series. The ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") of the Box-Ljung test is that the data is independently distributed and we do not experience non-random correlation, rejecting the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") means that serial correlation exist in the data. This is opposite of most statistical test, so it's a little weird to think about. Since the p-value &gt; 0.05, 0.3545, we fail to reject the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") and conclude the data is independently distributed.
+
+The residuals from our model should not exhibit any discernible patterns and should be white noise. Additionally, the mean should be 0 and the variance constant. Looking at the residual plot we can see that it fullfils all these requirements. This is further confirmed by our distribution plot of the residuals, which is roughly normally distributed.
+
+The ACF plot shows significant spikes before 100, 200 and 300. Because our seasonality is 96, we would expect spikes at 96, 192 and 288. Our ACF plot follows our expected spikes, though we have some significant spikes when at odd areas, like 125.
 
 ``` r
 checkresiduals(arima_model$model, lag=96)

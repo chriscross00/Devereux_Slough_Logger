@@ -214,3 +214,27 @@ The ACF plot shows significant spikes before 100, 200 and 300. Because our seaso
 ```{r}
 checkresiduals(arima_model$model, lag=96)
 ```
+
+
+
+
+### 5. Forecasting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
