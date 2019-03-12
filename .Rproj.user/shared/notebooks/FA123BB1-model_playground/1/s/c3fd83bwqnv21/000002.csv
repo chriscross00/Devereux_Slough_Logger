@@ -1,0 +1,3 @@
+"0","test2 <- ts(diff(lv$level_m, lag=96), frequency=96)"
+"0","test2_model <- auto.arima(test2, seasonal=FALSE, xreg=fourier(test2, K=4))"
+"0","plot(forecast(test2_model, h=192, xreg=fourier(test2, K=4, h=192)))"
