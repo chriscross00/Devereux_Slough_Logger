@@ -14,3 +14,10 @@ additive decomposition, this is where the seasonal variation is constant across 
 ![Y\_{t} = c + \\phi\_{1}y\_{dt-1} + \\phi\_{p}y\_{dt-p} + ... + \\theta\_{1}\\epsilon\_{t-1} + \\theta\_{q}\\epsilon\_{t-q} + \\epsilon\_{t}](https://latex.codecogs.com/png.latex?Y_%7Bt%7D%20%3D%20c%20%2B%20%5Cphi_%7B1%7Dy_%7Bdt-1%7D%20%2B%20%5Cphi_%7Bp%7Dy_%7Bdt-p%7D%20%2B%20...%20%2B%20%5Ctheta_%7B1%7D%5Cepsilon_%7Bt-1%7D%20%2B%20%5Ctheta_%7Bq%7D%5Cepsilon_%7Bt-q%7D%20%2B%20%5Cepsilon_%7Bt%7D "Y_{t} = c + \phi_{1}y_{dt-1} + \phi_{p}y_{dt-p} + ... + \theta_{1}\epsilon_{t-1} + \theta_{q}\epsilon_{t-q} + \epsilon_{t}")
 
 ![y = mx + \\beta](https://latex.codecogs.com/png.latex?y%20%3D%20mx%20%2B%20%5Cbeta "y = mx + \beta")
+
+We need to use a FT because seasonal versions of ARIMA are not designed to take in periods as long as daily, 96, instead seasonal ARIMA periods are typicallymuch shorter like monthly, 12, or quarterly, 4. ARIMA implemented in R has a seasonal period max of 350, but I saw that I was testing the limits of my 16gb of memory at even 96. Instead we'll use the fourier transformation, this has a number of advantages:
+
+    * Can use seasonality of any length
+    * Can include multiple seasonalities. In this case we can do daily and annual
+
+The main disadvantage is that seasonality is assumed to be fixed. In this case it is fine, because the variance among days is stable and seasonality is very stable, we won't take more than 96 measurements per day and we've accounted for leap years.
