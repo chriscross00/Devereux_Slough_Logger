@@ -66,24 +66,61 @@ checkresiduals(test2_model)
 ```{r}
 test3 <- msts(lv$level_m, seasonal.periods=c(96,35064))
 
-test3_model <- auto.arima(test3, seasonal=FALSE, xreg=fourier(report, K=c(5,2)))
-test3_model$aic
--16135.9
+best_fit <- list=(arima_params=Inf, aicc=Inf, i=Inf, j=Inf)
 
-plot(forecast(test3_model, h=192, xreg=fourier(test3, K=c(5,2), h=192)))
+for (i in 1:10){
+    for (j in 1:5){
+        fit <- auto.arima(test3, seasonal=FALSE, xreg=fourier(test3, K=c(i,j)))
+        if (fit$aicc < best_fit$aicc)
+            best_fit <- list(fit=fit$fit, aicc=fit$aicc, i=i, j=j)
+        else break;
+    }
 
-checkresiduals(test3_model, lag=96)
+}
+
+best_fit
+plotter <- forecast(best_fit, xreg=fourier(test3, K=c(10,2), h=192))
+autoplot(plotter)
+
+checkresiduals(best_fit, lag=96)
 ```
+```
+
+This searches for the best model. It also satisfies the LB test. K=c(10,2) works best for now.
+```{r}
+test3 <- msts(lv$level_m, seasonal.periods=c(96,35064))
+
+best_fit <- list=(arima_params=Inf, aicc=Inf, i=Inf, j=Inf)
+
+for (i in 1:10){
+    for (j in 1:5){
+        fit <- auto.arima(test3, seasonal=FALSE, xreg=fourier(test3, K=c(i,j)))
+        if (fit$aicc < best_fit$aicc)
+            best_fit <- list(fit=fit$fit, aicc=fit$aicc, i=i, j=j)
+        else break;
+    }
+
+}
+
+best_fit
+plotter <- forecast(best_fit, xreg=fourier(test3, K=c(10,2), h=192))
+autoplot(plotter)
+
+checkresiduals(best_fit, lag=96)
 ```
 
 
 ```{r}
-test_list = list(Inf)
-```
+test_ls <- list(arima_params=Inf, aicc=Inf, i=Inf)
 
-```{r}
-print('Hi')
-```
+for (i in 1:2){
+    fit <- auto.arima(test3, seasonal=F, xreg=fourier(test3, K=c(i,1)))
+    if (fit$aicc < test_ls$aicc)
+        test_ls <- list(arima_params=fit$fit, aicc=fit$aicc, i=i)
+    else break;
+}
 
+plotter <- forecast(test_ls$arima_params, xreg=fourier(test3, K=c(test_ls$i,2), h=192))
+```
 
 

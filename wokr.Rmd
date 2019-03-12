@@ -1,0 +1,16 @@
+---
+title: "t"
+author: "Christoper Chan"
+date: "March 12, 2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+r
+r$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)
+96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
+
+r

@@ -154,9 +154,45 @@ Things to add:
     * Why I need to use
 * msts object
     * Explain why I need multiple seasonals
+
+For this project we'll use a multi-seasonal time series (msts) function as our time series. This allows us to take into account the daily seasonality we've seen from the plots and the annual seasonality we'd expect to see based on meteorological reasoning. Since the loggers take measurements every 15 minutes we get our seasonal.period from the following equations:
+$$\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)
+96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}$$
+
+Now that we have normalized our data and have time series object made we create a model.
+```{r}
+lv_ts <- msts(lv$level_m, seasonal.periods=c(96,35064))
+```
+
 * auto.arima
     * analysis
     * Ecological significance
+
+```{r}
+best_fit <- list(aicc=Inf, i=Inf, j=Inf)
+
+for (i in 1:10){
+    for (j in 1:5){
+        fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(i,j)))
+        if (fit$aicc < best_fit$aicc)
+            best_fit <- list(aicc=fit$aicc, i=i, j=j)
+        else break;
+    }
+
+}
+```
+ 
+```{r}
+plotter <- forecast(best_fit, xreg=fourier(lv_ts, K=c(10,2), h=192))
+autoplot(plotter)
+```
+
+
+
+
+
+# 5. Validate model
+
 * Validate model
     * looks
     * residuals
@@ -165,22 +201,12 @@ Things to add:
         * calculate mean and plot residuals 
 
 ```{r}
-lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
-```
-
-```{r}
-auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(4,1)))
-plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts, K=c(4,1), h=192)))
-```
-
-# 5. Validate model
-```{r}
-checkresiduals(auto_fit, lag=96)
+checkresiduals(best_fit, lag=96)
 ```
 
 Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value < 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.
 ```{r}
-Box.test(auto_fit, lag=, type='Ljung-Box')
+checkresiduals(best_fit, lag=96)
 ```
 
 
