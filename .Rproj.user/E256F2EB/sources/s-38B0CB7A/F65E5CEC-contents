@@ -3,7 +3,7 @@ title: "test"
 author: "Christoper Chan"
 date: "March 12, 2019"
 output:
-    rmarkdown::github_document:
+    github_document:
         pandoc_arg: --webtex
 ---
 
