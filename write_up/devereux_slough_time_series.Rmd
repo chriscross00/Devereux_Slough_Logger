@@ -169,27 +169,29 @@ lv_ts <- msts(lv$level_m, seasonal.periods=c(96,35064))
     * Ecological significance
 
 ```{r}
-best_fit <- list(aicc=Inf, i=Inf, j=Inf)
-
-for (i in 1:10){
-    for (j in 1:5){
-        fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(i,j)))
-        if (fit$aicc < best_fit$aicc)
-            best_fit <- list(aicc=fit$aicc, i=i, j=j)
-        else break;
+arima_param <- function(ts){
+    best_fit <- list(model=Inf, aicc=Inf, i=Inf, j=Inf)
+    
+    for (i in 1:10){
+        for (j in 1:5){
+            fit <- auto.arima(ts, seasonal=FALSE, xreg=fourier(ts, K=c(i,j)))
+            if (fit$aicc < best_fit$aicc)
+                best_fit <- list(model=fit, aicc=fit$aicc, i=i, j=j)
+            else break;
+        }
+    
     }
-
+    return(best_fit)
 }
 ```
- 
+
+
 ```{r}
-plotter <- forecast(best_fit, xreg=fourier(lv_ts, K=c(10,2), h=192))
+arima_model <- arima_param(lv_ts)
+
+plotter <- forecast(arima_model$model, xreg=fourier(lv_ts, K=c(arima_model$i, arima_model$j), h=192))
 autoplot(plotter)
 ```
-
-
-
-
 
 # 5. Validate model
 
@@ -200,18 +202,7 @@ autoplot(plotter)
         * Ljung-box
         * calculate mean and plot residuals 
 
-```{r}
-checkresiduals(best_fit, lag=96)
-```
-
 Running a Lijung-Box test to quantifiable determine if the ACF of lv_diff is non-zero. Because the $H_0$ of the Box-Ljung test is that the data is independently distributed, rejecting the $H_0$ means that serial correlation exist in the data. Since the p-value < 0.05, in this case it is less than 2.2e-16, we reject the $H_0$ and conclude the data has some serial correlation.
 ```{r}
-checkresiduals(best_fit, lag=96)
+checkresiduals(arima_model$model, lag=96)
 ```
-
-
-6. Create model
-
-7. Validate model
-8. Forecast
-9. Conclusion

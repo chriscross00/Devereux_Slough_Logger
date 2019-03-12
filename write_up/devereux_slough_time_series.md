@@ -172,23 +172,70 @@ Things to add:
     -   Equation
     -   Why I need to use
 -   msts object
+    -   Explain why I need multiple seasonals
+
+For this project we'll use a multi-seasonal time series (msts) function as our time series. This allows us to take into account the daily seasonality we've seen from the plots and the annual seasonality we'd expect to see based on meteorological reasoning. Since the loggers take measurements every 15 minutes we get our seasonal.period from the following equations:
+4(measurements per hour) \* 24(hours in a day) = 96(measurements per day)
+96(measurements per day) \* 365.25(days per year) = 35064(measurements per year)
+
+Now that we have normalized our data and have time series object made we create a model.
+
+``` r
+lv_ts <- msts(lv$level_m, seasonal.periods=c(96,35064))
+```
+
 -   auto.arima
     -   analysis
     -   Ecological significance
 
 ``` r
-lv_ts <- msts(lv_df$level_m, seasonal.periods=c(96,35064))
+arima_param <- function(ts){
+    best_fit <- list(model=Inf, aicc=Inf, i=Inf, j=Inf)
+    
+    for (i in 1:10){
+        for (j in 1:5){
+            fit <- auto.arima(ts, seasonal=FALSE, xreg=fourier(ts, K=c(i,j)))
+            if (fit$aicc < best_fit$aicc)
+                best_fit <- list(model=fit, aicc=fit$aicc, i=i, j=j)
+            else break;
+        }
+    
+    }
+    return(best_fit)
+}
 ```
 
 ``` r
-auto_fit <- auto.arima(lv_ts, seasonal=FALSE, xreg=fourier(lv_ts, K=c(4,1)))
-plot(forecast(auto_fit, h=192, xreg=fourier(lv_ts, K=c(4,1), h=192)))
+arima_model <- arima_param(lv_ts)
+
+plotter <- forecast(arima_model$model, xreg=fourier(lv_ts, K=c(arima_model$i, arima_model$j), h=192))
+autoplot(plotter)
 ```
 
-![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-1.  Create model
+5. Validate model
+=================
 
-2.  Validate model
-3.  Forecast
-4.  Conclusion
+-   Validate model
+    -   looks
+    -   residuals
+        -   plot ACF, should not be correlated
+        -   Ljung-box
+        -   calculate mean and plot residuals
+
+Running a Lijung-Box test to quantifiable determine if the ACF of lv\_diff is non-zero. Because the *H*<sub>0</sub> of the Box-Ljung test is that the data is independently distributed, rejecting the *H*<sub>0</sub> means that serial correlation exist in the data. Since the p-value &lt; 0.05, in this case it is less than 2.2e-16, we reject the *H*<sub>0</sub> and conclude the data has some serial correlation.
+
+``` r
+checkresiduals(arima_model$model, lag=96)
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-11-1.png)
+
+    ## 
+    ##  Ljung-Box test
+    ## 
+    ## data:  Residuals from Regression with ARIMA(2,0,3) errors
+    ## Q* = 70.722, df = 67, p-value = 0.3545
+    ## 
+    ## Model df: 29.   Total lags used: 96

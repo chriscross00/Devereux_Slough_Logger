@@ -63,64 +63,48 @@ plot(forecast(test2_model, h=192, xreg=fourier(test2, K=4, h=192)))
 checkresiduals(test2_model)
 ```
 
-```{r}
-test3 <- msts(lv$level_m, seasonal.periods=c(96,35064))
-
-best_fit <- list=(arima_params=Inf, aicc=Inf, i=Inf, j=Inf)
-
-for (i in 1:10){
-    for (j in 1:5){
-        fit <- auto.arima(test3, seasonal=FALSE, xreg=fourier(test3, K=c(i,j)))
-        if (fit$aicc < best_fit$aicc)
-            best_fit <- list(fit=fit$fit, aicc=fit$aicc, i=i, j=j)
-        else break;
-    }
-
-}
-
-best_fit
-plotter <- forecast(best_fit, xreg=fourier(test3, K=c(10,2), h=192))
-autoplot(plotter)
-
-checkresiduals(best_fit, lag=96)
-```
-```
-
 This searches for the best model. It also satisfies the LB test. K=c(10,2) works best for now.
 ```{r}
 test3 <- msts(lv$level_m, seasonal.periods=c(96,35064))
 
-best_fit <- list=(arima_params=Inf, aicc=Inf, i=Inf, j=Inf)
+
+best_fit <- list(model=Inf, aicc=Inf, i=Inf, j=Inf)
 
 for (i in 1:10){
     for (j in 1:5){
         fit <- auto.arima(test3, seasonal=FALSE, xreg=fourier(test3, K=c(i,j)))
         if (fit$aicc < best_fit$aicc)
-            best_fit <- list(fit=fit$fit, aicc=fit$aicc, i=i, j=j)
+            best_fit <- list(model=fit, aicc=fit$aicc, i=i, j=j)
         else break;
     }
 
 }
 
+
 best_fit
-plotter <- forecast(best_fit, xreg=fourier(test3, K=c(10,2), h=192))
+plotter <- forecast(best_fit$model, xreg=fourier(test3, K=c(best_fit$i,best_fit$j), h=192))
 autoplot(plotter)
 
-checkresiduals(best_fit, lag=96)
+checkresiduals(best_fit$model, lag=96)
 ```
 
 
+
+Function for finding arima params
 ```{r}
-test_ls <- list(arima_params=Inf, aicc=Inf, i=Inf)
-
-for (i in 1:2){
-    fit <- auto.arima(test3, seasonal=F, xreg=fourier(test3, K=c(i,1)))
-    if (fit$aicc < test_ls$aicc)
-        test_ls <- list(arima_params=fit$fit, aicc=fit$aicc, i=i)
-    else break;
+arima_param <- function(ts){
+    best_fit <- list(model=Inf, aicc=Inf, i=Inf, j=Inf)
+    
+    for (i in 1:2){
+        for (j in 1:2){
+            fit <- auto.arima(ts, seasonal=FALSE, xreg=fourier(ts, K=c(i,j)))
+            if (fit$aicc < best_fit$aicc)
+                best_fit <- list(model=fit, aicc=fit$aicc, i=i, j=j)
+            else break;
+        }
+    
+    }
+    return(best_fit)
 }
-
-plotter <- forecast(test_ls$arima_params, xreg=fourier(test3, K=c(test_ls$i,2), h=192))
 ```
-
 
