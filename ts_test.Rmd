@@ -80,7 +80,7 @@ str(lv_zoo)
 print(ts(lv$level_m, start=c(2018, 02, 12), frequency=365.25), calendar=T)
 ```
 
-msts 
+msts
 ```{r}
 lv_ts_wk <- msts(lv$level_m, seasonal.periods=c(96,35064))
 head(lv_ts_wk)
