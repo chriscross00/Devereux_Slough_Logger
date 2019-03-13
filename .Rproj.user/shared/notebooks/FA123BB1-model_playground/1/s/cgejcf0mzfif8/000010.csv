@@ -1,0 +1,3 @@
+"0","report <- msts(lv$level_m, seasonal.periods=c(96,35064))"
+"0","report_model <- auto.arima(report, seasonal=FALSE, xreg=fourier(report, K=c(4,1)))"
+"0","plot(forecast(report_model, h=192, xreg=fourier(report, K=c(4,1), h=192)))"

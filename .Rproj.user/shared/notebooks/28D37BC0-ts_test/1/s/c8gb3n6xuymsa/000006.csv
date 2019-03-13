@@ -1,0 +1,4 @@
+"0","auto_test1 <- auto.arima(test1_diff, seasonal=FALSE, xreg=fourier(test1_diff, K=4))"
+"2","Error in auto.arima(test1_diff, seasonal = FALSE, xreg = fourier(test1_diff,  : 
+  No suitable ARIMA model found
+"

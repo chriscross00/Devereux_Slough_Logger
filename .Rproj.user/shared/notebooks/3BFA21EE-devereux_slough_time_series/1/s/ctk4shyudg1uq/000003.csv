@@ -1,0 +1,3 @@
+"0","arima_model <- arima_param(lv_ts)"
+"0","plotter <- forecast(arima_model$model, xreg=fourier(lv_ts, K=c(arima_model$i, arima_model$j), h=192))"
+"0","autoplot(plotter)"

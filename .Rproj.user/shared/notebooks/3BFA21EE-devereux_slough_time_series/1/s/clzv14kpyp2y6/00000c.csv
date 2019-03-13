@@ -1,0 +1,7 @@
+"0","here()"
+"1","[1]"
+"1"," ""/home/ckc/Documents/git_projects/Devereux_Slough_Logger"""
+"1","
+"
+"0","lv <- read_csv('data/180301 Level Data.csv')"
+"0","head(lv, n=5)"

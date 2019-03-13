@@ -1,0 +1,3 @@
+"0","decomp_ts <- ts(lv_df$level_m, frequency = 96) %>%"
+"0","    stl(s.window='periodic') %>%"
+"0","    plot(main='Decomposition of level_m')"

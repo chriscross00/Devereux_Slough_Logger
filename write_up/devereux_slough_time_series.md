@@ -12,14 +12,28 @@ This project is broken down into the following steps:
 
 1.  Background of Devereux Slough and data
 2.  Normalizing the data
-3.  Creating the model
-4.  Validating the model
-5.  Forecasting
-6.  Conclusion
+3.  EDA
+4.  Creating the model
+5.  Validating the model
+6.  Forecasting
+7.  Conclusion
 
 This model serves several purposes. First, allows the COPR staff to more informed management descisions about the reserve and Devereux Slough. Collecting data and building models should result in better management of the reserve. Second, it extends the power of the COPR staff, allowing volunteers to contribute in meaningful ways with minimal effort from the COPR staff. Third, it can contribute to the larger scientific understanding of ecology. There is little scientific literature on TOCE in North America, most of the literature reflects TOCE in South Africa.
 
 This project outlines a small portion of the Water Quality and Invertebrate Monitoring Program carried out by the Santa Barbarba Audubon Society, Coal Oil Point Reserve (COPR) and the Cheadle Center for Biodiversity and Ecological Restoration. More information about the Santa Barbara Audubon Society can be found [here](https://santabarbaraaudubon.org/), as well as COPR which can be found [here](https://copr.nrs.ucsb.edu/).
+
+### Technologies and techniques used
+
+Throughout the course of this analysis I've used a number of tools to accomplish our goals.
+
+-   RMarkdown
+-   Libraries
+    -   tidyverse
+    -   forecast
+-   Time series
+    -   ACF and PACF
+    -   Fourier transform
+    -   ARIMA models
 
 1 Background
 ============
@@ -49,53 +63,48 @@ Santa Barbara's climate is classified as a Mediterranean climate, characterized 
 ``` r
 library(tidyverse)
 library(here)
-library(zoo)
-library(tseries)
 library(forecast)
+library(tseries)
 ```
 
 2 Normalizing the data
 ======================
 
+Things to add:
+
+-   Create the msts
+
 Reading in a logger dataset that I've been using for testing.
 
 ``` r
 here()
+
 lv <- read_csv('data/180301 Level Data.csv')
+head(lv, n=5)
 ```
 
 Changing the format of the date\_time column into a readible format by time series functions. We are using the zoo() over other time series functions, like the standard ts(), because it works well with irregular intervals.
 
 ``` r
 lv$date_time <- as.POSIXct(lv$date_time, format = '%m/%d/%y %H:%M')
+lv_df <- lv[c(2,5)]
 
-lv_zoo <- zoo(lv$level_m, order.by = lv$date_time)
-str(lv_zoo)
+cat('Absolute difference in water level over the period of', as.character(min(lv_df$date_time)), 'and', as.character(min(lv_df$date_time)), 'in meters:', max(lv_df$level_m) - min(lv_df$level_m))
 ```
 
-    ## 'zoo' series from 2018-02-12 12:00:00 to 2018-03-01 09:15:00
-    ##   Data: num [1:1622] 2.19 2.19 2.19 2.19 2.2 ...
-    ##   Index:  POSIXct[1:1622], format: "2018-02-12 12:00:00" "2018-02-12 12:15:00" ...
+    ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-02-12 12:00:00 in meters: 0.06599439
+
+3. EDA
+======
+
+Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. A additive model is describe as: ![Time series = Seasonal + Trend + Random](https://latex.codecogs.com/png.latex?Time%20series%20%3D%20Seasonal%20%2B%20Trend%20%2B%20Random "Time series = Seasonal + Trend + Random")
+
+Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter. Additionally, we should expect a annual seasonality, meaning that the water level will have a predictable cycle over the course of a year. We'll have to factor both the daily and annual seasonality into our time series model.
 
 ``` r
-cat('\nAbsolute difference in water level over the period of', as.character(start(lv_zoo)), 'and', as.character(end(lv_zoo)), 'in meters:', max(lv_zoo) - min(lv_zoo))
-```
-
-    ## 
-    ## Absolute difference in water level over the period of 2018-02-12 12:00:00 and 2018-03-01 09:15:00 in meters: 0.06599439
-
-Graphing the water level across time we gather a number of important insights into our data. The first is that the time series is not stationary. A quick look at the graph and we can conclude that the mean decreases over time. Without further testing it is too hard to tell if the variance and covariance vary over time, but I believe they are relatively constant. If the variance is constant than we can perform additive decomposition, this is where the seasonal variation is constant across time. Second, it appears we have some seasonality, on a daily basis. This should be removed in order to get a accurate depiction of the trend of the series. These statitistical facts fit the ecological realities of Devereux Slough. Because of the very short rainy season, roughly 3 months, in Santa Barbara we would expect to see water level decrease in late winter.
-
-``` r
-df_lv_zoo <- data.frame(lv_zoo)
-
-df_lv_zoo <- df_lv_zoo %>%
-    rename(level = lv_zoo) %>%
-    mutate(plot_time = as.POSIXct(rownames(df_lv_zoo), format = "%Y-%m-%d %H:%M:%S"))
-df_lv_zoo <- df_lv_zoo %>% select(plot_time, level)
-
-ggplot(df_lv_zoo, aes(plot_time, level)) +
+ggplot(lv_df, aes(date_time, level_m)) +
     geom_line() +
+    geom_smooth(method = 'loess', se = FALSE) +
     xlab('Date') +
     ylab('Level (m)') + 
     ggtitle('Water level (m) over time')
@@ -103,37 +112,142 @@ ggplot(df_lv_zoo, aes(plot_time, level)) +
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-4-1.png)
 
-The same time series with a smoothing function to get the general trend.
+This breaks down the data into it's individual components: seasonality, trend and the residuals, well irregular components using loess which gives the acronym STL. The seasonality seems to be daily and the amplitude does not seem to change, confirming a constant variance. This means we don't need to transform the amplitude, ie take the log. The trend is a relatively constant negative slope that occurs over the course of the dataset. The remainder, which are residuals from the seasonal plus trend fit, show no distinct pattern and are white noise. This means that all the data has been extracted from it and we have captured the entire picture.
+
+While our time series has both daily and annual seasonality, we only run it with the daily seasonality because we don't have a entire annual seasonal cycle. stl() requires a entire cycle.
 
 ``` r
-ggplot(df_lv_zoo, aes(plot_time, level)) +
-    geom_line() +
-    geom_smooth(method = 'loess', se = FALSE) +
-    xlab('Date') +
-    ylab('Level (m)') + 
-    ggtitle('Water level (m) over time w/ trend line')
+decomp_ts <- ts(lv_df$level_m, frequency = 96) %>%
+    stl(s.window='periodic') %>%
+    plot(main='Decomposition of level_m')
 ```
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-5-1.png)
 
-ACF before differencing. There is a obvious pattern to our data and most of the lags are above the significance level.
+Because our decomposition plots show a negative trend we must make the time series stationary. This is done by taking the seasonal difference. The ACF and PACF before and after differencing are shown below. Because each day has 96 observations, our daily seasonal difference component is lag=96.A plot of the data after taking the seasonal difference shows that the trend is removed. Even after taking the seasonal difference there is significant autocorrelation with previous points. Now that the trend is removed from the dataset we can move on with our model.
 
 ``` r
-ggAcf(lv$level_m, lag.max=100)
+ggtsdisplay(lv_df$level_m, main='ACF and PACF of level_m')
 ```
 
 ![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-1.png)
 
-1.  EDA data
-    -   Plot of data with loess
-2.  Stationarity
-    -   ACF & PACF
-    -   ADF and KPSS test
-3.  Parameters of model
-    -   Analyze ACF & PACF model
-4.  Create model
+``` r
+ggtsdisplay(diff(lv_df$level_m, lag=96), main='ACF and PACF of diff(level_m)')
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-6-2.png)
+
+A more mathematically rigorous analysis of stationarity is the Augmented Dickey Fuller (ADF) Test. Running the ADF test on our data with daily seasonality taken into account gives us a p-value of less than 0.01. Because our p-value &gt; 0.05 we can reject our ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") that there is a unit root in our time series, and accept the ![H\_1](https://latex.codecogs.com/png.latex?H_1 "H_1") that the time series is stationary.
+
+``` r
+lv_adf <- adf.test(lv_df$level_m, k=96)
+lv_diff_adf <- adf.test(diff(lv_df$level_m, lag=96), k=96)
+
+cat('p-value from adf.test() of lv_df:', lv_adf$p.value,
+    '\np-value from adf.test() of seasonally differenced lv_df:', lv_diff_adf$p.value)
+```
+
+    ## p-value from adf.test() of lv_df: 0.36561 
+    ## p-value from adf.test() of seasonally differenced lv_df: 0.01
+
+4.Create the model
+==================
+
+Things to add:
+
+-   ARIMA model
+    -   Background
+    -   equation
+
+        ![Y\_{t} = c + \\phi\_{1}y\_{dt-1} + \\phi\_{p}y\_{dt-p} + ... + \\theta\_{1}\\epsilon\_{t-1} + \\theta\_{q}\\epsilon\_{t-q} + \\epsilon\_{t}](https://latex.codecogs.com/png.latex?Y_%7Bt%7D%20%3D%20c%20%2B%20%5Cphi_%7B1%7Dy_%7Bdt-1%7D%20%2B%20%5Cphi_%7Bp%7Dy_%7Bdt-p%7D%20%2B%20...%20%2B%20%5Ctheta_%7B1%7D%5Cepsilon_%7Bt-1%7D%20%2B%20%5Ctheta_%7Bq%7D%5Cepsilon_%7Bt-q%7D%20%2B%20%5Cepsilon_%7Bt%7D "Y_{t} = c + \phi_{1}y_{dt-1} + \phi_{p}y_{dt-p} + ... + \theta_{1}\epsilon_{t-1} + \theta_{q}\epsilon_{t-q} + \epsilon_{t}")
+
     -   Why i'm using this model
         -   Pros/Cons
-5.  Validate model
-6.  Forecast
-7.  Conclusion
+
+The Fourier Transform (FT) decomposes a function based on time into the frequencies that make it up, using the understanding that all waveforms can be drescibed by a sum of sinusoids of different frequencies
+
+The inverse fourier transform that converts a function of frequency into a function of time, as follows:
+
+![f(x) = \\int^{\\infty}\_{-\\infty}F(K)e^{2{\\pi}ikx}dk](https://latex.codecogs.com/png.latex?f%28x%29%20%3D%20%5Cint%5E%7B%5Cinfty%7D_%7B-%5Cinfty%7DF%28K%29e%5E%7B2%7B%5Cpi%7Dikx%7Ddk "f(x) = \int^{\infty}_{-\infty}F(K)e^{2{\pi}ikx}dk")
+
+We need to use a FT because seasonal versions of ARIMA are not designed to take in periods as long as daily, 96, instead seasonal ARIMA periods are typically much shorter like monthly, 12, or quarterly, 4. ARIMA implemented in R has a seasonal period max of 350, but I saw that I was testing the limits of my 16gb of memory at even 96. Instead we'll use the fourier transformation, this has a number of advantages:
+
+    * Can use seasonality of any length
+    * Can include multiple seasonalities. In this case we can do daily and annual
+
+The main disadvantage is that seasonality is assumed to be fixed. In this case it is fine, because the variance among days is stable and seasonality is very stable, we won't take more than 96 measurements per day and we've accounted for leap years.
+
+For this project we'll use a multi-seasonal time series (msts) function as our time series. This allows us to take into account the daily seasonality we've seen from the plots and the annual seasonality we'd expect to see based on meteorological reasoning. Since the loggers take measurements every 15 minutes we get our seasonal.period from the following equations:
+
+![\\text{4(measurements per hour) \* 24(hours in a day) = 96(measurements per day)}\\\\
+\\text{96(measurements per day) \* 365.25(days per year) = 35064(measurements per year)}](https://latex.codecogs.com/png.latex?%5Ctext%7B4%28measurements%20per%20hour%29%20%2A%2024%28hours%20in%20a%20day%29%20%3D%2096%28measurements%20per%20day%29%7D%5C%5C%0A%5Ctext%7B96%28measurements%20per%20day%29%20%2A%20365.25%28days%20per%20year%29%20%3D%2035064%28measurements%20per%20year%29%7D "\text{4(measurements per hour) * 24(hours in a day) = 96(measurements per day)}\\
+\text{96(measurements per day) * 365.25(days per year) = 35064(measurements per year)}")
+
+Now that we have normalized our data and have time series object made we create a model.
+
+``` r
+lv_ts <- msts(lv$level_m, seasonal.periods=c(96,35064))
+```
+
+-   auto.arima
+    -   analysis
+    -   Ecological significance
+
+We'll create a function for reproducibility. It performs a grid search of ARIMA parameters by adjusting the orders of the Fourier term. By comparing the AIC of different models we can select the model with the largest AIC.
+
+``` r
+arima_param <- function(ts){
+    # Performs a grid search for optimal ARIMA parameters by comparing aicc of each model
+    # 
+    # Return: The model and fourier transform with the lowest aicc
+    best_fit <- list(model=Inf, aic=Inf, i=Inf, j=Inf)
+    
+    for (i in 1:10){
+        for (j in 1:5){
+            fit <- auto.arima(ts, seasonal=FALSE, xreg=fourier(ts, K=c(i,j)))
+            if (fit$aic < best_fit$aic)
+                best_fit <- list(model=fit, aicc=fit$aic, i=i, j=j)
+            else break;
+        }
+    
+    }
+    return(best_fit)
+}
+```
+
+Running the ARIMA parameter chooser function on our msts dataset. Plotting a forecast for two days gives us reasonable results. However, we have to validate our model in order to trust our forecast.
+
+``` r
+arima_model <- arima_param(lv_ts)
+
+plotter <- forecast(arima_model$model, xreg=fourier(lv_ts, K=c(arima_model$i, arima_model$j), h=192))
+autoplot(plotter)
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+5. Validate model
+=================
+
+checkresiduals() is a nice wrapper function that calls a number of test typically used in validating time series models. We'll look at each test individually to make sure we can trust our forecasts.
+
+Running a Lijung-Box test helps give us a quantifiable determination if the our model is valide. The Ljung-Box test examines if there is autocorrelation in the series. The ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") of the Box-Ljung test is that the data is independently distributed and we do not experience non-random correlation, rejecting the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") means that serial correlation exist in the data. This is opposite of most statistical test, so it's a little weird to think about. Since the p-value &gt; 0.05, 0.3545, we fail to reject the ![H\_0](https://latex.codecogs.com/png.latex?H_0 "H_0") and conclude the data is independently distributed.
+
+The residuals from our model should not exhibit any discernible patterns and should be white noise. Additionally, the mean should be 0 and the variance constant. Looking at the residual plot we can see that it fullfils all these requirements. This is further confirmed by our distribution plot of the residuals, which is roughly normally distributed.
+
+The ACF plot shows significant spikes before 100, 200 and 300. Because our seasonality is 96, we would expect spikes at 96, 192 and 288. Our ACF plot follows our expected spikes, though we have some significant spikes when at odd areas, like 125.
+
+``` r
+checkresiduals(arima_model$model, lag=96)
+```
+
+![](devereux_slough_time_series_files/figure-markdown_github/unnamed-chunk-11-1.png)
+
+    ## 
+    ##  Ljung-Box test
+    ## 
+    ## data:  Residuals from Regression with ARIMA(2,0,3) errors
+    ## Q* = 70.722, df = 67, p-value = 0.3545
+    ## 
+    ## Model df: 29.   Total lags used: 96
