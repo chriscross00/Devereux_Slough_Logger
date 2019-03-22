@@ -5,17 +5,17 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "527119456",
     "id" : "AF14D817",
-    "lastKnownWriteTime" : 1552431488,
-    "last_content_update" : 1552431488297,
+    "lastKnownWriteTime" : 1552441010,
+    "last_content_update" : 1552441010975,
     "path" : "~/Documents/git_projects/Devereux_Slough_Logger/write_up/devereux_slough_time_series.Rmd",
     "project_path" : "write_up/devereux_slough_time_series.Rmd",
     "properties" : {
-        "cursorPosition" : "220,7",
+        "cursorPosition" : "0,3",
         "docOutlineVisible" : "0",
         "last_setup_crc32" : "38B0CB7Abb338d19",
-        "scrollLine" : "204"
+        "scrollLine" : "0"
     },
     "relative_order" : 4,
     "source_on_save" : false,

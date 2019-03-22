@@ -1,0 +1,21 @@
+"0","checkresiduals(arima_model$model, lag=96)
+"
+"1","
+"
+"1","	Ljung-Box test"
+"1","
+"
+"1","
+"
+"1","data:  "
+"1","Residuals from Regression with ARIMA(2,0,3) errors"
+"1","
+"
+"1","Q* = 70.722, df = 67, p-value = 0.3545"
+"1","
+"
+"1","
+"
+"1","Model df: 29.   Total lags used: 96
+
+"
