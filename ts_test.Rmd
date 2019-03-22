@@ -75,7 +75,11 @@ lv_ts_wk %>% adf.test(k=96)
 test1_diff %>% adf.test(k=96)
 ```
 
+<<<<<<< HEAD
+msts
+=======
 diff lv_ts_wk
+>>>>>>> 1feb3c5e693b2b5d2decc1b36be3d42998e7c39b
 ```{r}
 ggAcf(test1_diff, lag.max=100)
 ggPacf(test1_diff, lag.max=100)

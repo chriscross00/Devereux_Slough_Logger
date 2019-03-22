@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/180131 Level Data.csv="82319F93"
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/Logger.R="79527A74"
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/fourier.Rmd="DC256A97"
@@ -9,3 +10,10 @@
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/write_up/devereux_slough_time_series.Rmd="3BFA21EE"
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/write_up/devereux_slough_time_series.md="6E1950B3"
 /home/ckc/Documents/git_projects/Devereux_Slough_Logger/write_up/devereux_slough_time_series.utf8.md="E8E3B6F3"
+=======
+C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/fourier.Rmd="2F1B4B46"
+C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/tractor/tractor_arima.Rmd="2BDD4645"
+C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/ts_test.Rmd="2E053E7D"
+C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/work.R="C5394D72"
+C:/Users/chris/Documents/git_projects/Devereux_Slough_Logger/write_up/devereux_slough_time_series.Rmd="CD91506B"
+>>>>>>> 56c79d7886ecdeef22ccdbd7b301e011761396db
