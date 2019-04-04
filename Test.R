@@ -8,11 +8,11 @@ head(con)
 
 #converts logger date and time into a readable format for R. Additional reading on this topic can be found here: http://biostat.mc.vanderbilt.edu/wiki/pub/Main/ColeBeck/datestimes.pdf
 y = as.POSIXct(con$date, format = "%m/%d/%y %H:%M")
-View(y)
+# View(y)
 
 #Adding our correctly formatted time. Note that we'll have both the unformatted time and the correctly formatted time on the same table.
 x = data.frame(con, newtime = y)
-View(x)
+head(x)
 #Graph with our correctly formatted time and the conductivity. 
 plot(x=x$newtime, y=x$conductivity, xlab="Date", ylab="Conductivty (mS/cm)", main="Conductivity at PIER", type="l")
 
